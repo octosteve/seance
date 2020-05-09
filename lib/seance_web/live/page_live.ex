@@ -1,13 +1,16 @@
 defmodule SeanceWeb.PageLive do
   use SeanceWeb, :live_view
+  alias Seance.Blog
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: "", results: %{})}
+    posts = Blog.list_posts()
+    {:ok, assign(socket, posts: posts)}
   end
 
   @impl true
   def handle_event("suggest", %{"q" => query}, socket) do
+    socket = put_flash(socket, :info, "Wat")
     {:noreply, assign(socket, results: search(query), query: query)}
   end
 
