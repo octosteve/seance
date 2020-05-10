@@ -21,6 +21,8 @@ defmodule SeanceWeb.Router do
     live "/posts/new", PostLive.New, :new
     live "/posts/:id/edit", PostLive.New, :edit
 
+    get "/posts/:id/preview", PostPreviewController, :show
+
     live "/posts/:id", PostLive.Show, :show
     live "/posts/:id/show/edit", PostLive.Show, :edit
   end

@@ -1,0 +1,4 @@
+<%= link("edit", to: Routes.post_new_path(@conn, :edit, @post.id)) %>
+<div class="container">
+<%= raw @preview %>
+</div>

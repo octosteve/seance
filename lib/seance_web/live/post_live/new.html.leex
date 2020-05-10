@@ -1,12 +1,1 @@
-<%= if @live_action == :new do %>
-<%= live_modal @socket, SeanceWeb.PostLive.TitleComponent,
-    id: :new,
-    title: @page_title,
-    action: @live_action,
-    post: @post,
-    return_to: Routes.home_path(@socket, :index) %>
-<% else %>
-<div class="container">
-  <%= live_component @socket, SeanceWeb.PostLive.FormComponent, id: @post.id, title: @post.title, post: @post %>
-  </div>
-<% end %>
+<%= render_stage(@live_action, assigns, @socket) %>

@@ -15,5 +15,4 @@ defmodule SeanceWeb.PostLive.TitleComponent do
       |> assign(:changeset, changeset)
     }
   end
-
 end

@@ -6,7 +6,11 @@ defmodule SeanceWeb.PostLiveTest do
   alias Seance.Blog
 
   @create_attrs %{body: "some body", tags: "some tags", title: "some title"}
-  @update_attrs %{body: "some updated body", tags: "some updated tags", title: "some updated title"}
+  @update_attrs %{
+    body: "some updated body",
+    tags: "some updated tags",
+    title: "some updated title"
+  }
   @invalid_attrs %{body: nil, tags: nil, title: nil}
 
   defp fixture(:post) do
@@ -33,7 +37,7 @@ defmodule SeanceWeb.PostLiveTest do
       {:ok, index_live, _html} = live(conn, Routes.post_index_path(conn, :index))
 
       assert index_live |> element("a", "New Post") |> render_click() =~
-        "New Post"
+               "New Post"
 
       assert_patch(index_live, Routes.post_index_path(conn, :new))
 
@@ -55,7 +59,7 @@ defmodule SeanceWeb.PostLiveTest do
       {:ok, index_live, _html} = live(conn, Routes.post_index_path(conn, :index))
 
       assert index_live |> element("#post-#{post.id} a", "Edit") |> render_click() =~
-        "Edit Post"
+               "Edit Post"
 
       assert_patch(index_live, Routes.post_index_path(conn, :edit, post))
 
@@ -95,7 +99,7 @@ defmodule SeanceWeb.PostLiveTest do
       {:ok, show_live, _html} = live(conn, Routes.post_show_path(conn, :show, post))
 
       assert show_live |> element("a", "Edit") |> render_click() =~
-        "Edit Post"
+               "Edit Post"
 
       assert_patch(show_live, Routes.post_show_path(conn, :edit, post))
 

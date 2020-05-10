@@ -7,7 +7,11 @@ defmodule Seance.BlogTest do
     alias Seance.Blog.Post
 
     @valid_attrs %{body: "some body", tags: "some tags", title: "some title"}
-    @update_attrs %{body: "some updated body", tags: "some updated tags", title: "some updated title"}
+    @update_attrs %{
+      body: "some updated body",
+      tags: "some updated tags",
+      title: "some updated title"
+    }
     @invalid_attrs %{body: nil, tags: nil, title: nil}
 
     def post_fixture(attrs \\ %{}) do
