@@ -17,10 +17,9 @@ defmodule SeanceWeb.Router do
   scope "/", SeanceWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
-    live "/posts", PostLive.Index, :index
-    live "/posts/new", PostLive.Index, :new
-    live "/posts/:id/edit", PostLive.Index, :edit
+    live "/", HomeLive, :index
+    live "/posts/new", PostLive.New, :new
+    live "/posts/:id/edit", PostLive.New, :edit
 
     live "/posts/:id", PostLive.Show, :show
     live "/posts/:id/show/edit", PostLive.Show, :edit

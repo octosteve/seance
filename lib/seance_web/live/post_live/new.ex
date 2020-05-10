@@ -1,4 +1,4 @@
-defmodule SeanceWeb.PostLive.Index do
+defmodule SeanceWeb.PostLive.New do
   use SeanceWeb, :live_view
 
   alias Seance.Blog
@@ -9,15 +9,13 @@ defmodule SeanceWeb.PostLive.Index do
     {:ok, assign(socket, :posts, fetch_posts())}
   end
 
+  def render_stage_component(:new, socket) do
+    live_component(socket, SeanceWeb.PostLive.TitleComponent)
+  end
+
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
-  end
-
-  defp apply_action(socket, :edit, %{"id" => id}) do
-    socket
-    |> assign(:page_title, "Edit Post")
-    |> assign(:post, Blog.get_post!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -26,18 +24,19 @@ defmodule SeanceWeb.PostLive.Index do
     |> assign(:post, %Post{})
   end
 
-  defp apply_action(socket, :index, _params) do
+  defp apply_action(socket, :edit, %{"id" => id}) do
+    post = Blog.get_post!(id)
+
     socket
-    |> assign(:page_title, "Listing Posts")
-    |> assign(:post, nil)
+    |> assign(:page_title, "Author Mode")
+    |> assign(:post, post)
   end
 
-  @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    post = Blog.get_post!(id)
-    {:ok, _} = Blog.delete_post(post)
 
-    {:noreply, assign(socket, :posts, fetch_posts())}
+  @impl true
+  def handle_event("initialize_post", %{"post" => attrs}, socket) do
+    {:ok, post} = Blog.create_post(attrs)
+    {:noreply, push_patch(socket, to: Routes.post_new_path(socket, :edit, post.id))}
   end
 
   defp fetch_posts do

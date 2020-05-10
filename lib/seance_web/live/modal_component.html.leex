@@ -1,0 +1,17 @@
+<div id="<%= @id %>" class="phx-modal" phx-capture-click="close" phx-window-keydown="close" phx-key="escape"
+     phx-target="#<%= @id %>" phx-page-loading>
+  <div class="modal" tabindex="-1" role="dialog" style="display: block">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <%= live_patch to: @return_to, class: "button phx-modal-close" do %>
+          <span aria-hidden="true">&times;</span>
+          <% end %>
+        </div>
+        <div class="modal-body phx-modal-content">
+          <%= live_component @socket, @component, @opts %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

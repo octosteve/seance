@@ -14,6 +14,6 @@ defmodule Seance.Blog.Post do
   def changeset(post, attrs) do
     post
     |> cast(attrs, [:title, :tags, :body])
-    |> validate_required([:title, :tags, :body])
+    |> validate_required([:title])
   end
 end
