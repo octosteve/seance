@@ -4,6 +4,7 @@
 import "../css/app.scss"
 import "bootstrap"
 import $ from 'jquery';
+
 window.jQuery = $;
 window.$ = $;
 
@@ -20,9 +21,32 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
+import Ace from "ace-builds"
+import "ace-builds/webpack-resolver";
 
+let Hooks = {}
+Hooks.AddCodeSnippet = {
+  mounted() {
+    this.el.addEventListener("click", _e => {
+      let editorPre = document.createElement("pre")
+      document.querySelector("#post").appendChild(editorPre)
+      editorPre.setAttribute("id", "editor-me")
+      let editor = Ace.edit("editor-me",{
+        maxLines: 50,
+        minLines: 10,
+        value: "var hello = 'world'" + "\n",
+        mode: "ace/mode/javascript",
+        bug: 1
+      })
+      editor.setTheme("ace/theme/twilight");
+      editor.session.setMode("ace/mode/javascript");
+    })
+
+
+  }
+}
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
 
 // Show progress bar on live navigation and form submits
 window.addEventListener("phx:page-loading-start", info => NProgress.start())
