@@ -10,7 +10,13 @@ defmodule SeanceWeb.PostLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)}
+     |> assign(:changeset, changeset)
+     |> assign(:code_examples, [])}
+  end
+
+  @impl true
+  def handle_event("add_code", _params, socket) do
+  {:noreply, update(socket, :code_examples, &([%{id: Ecto.UUID.generate(), content: "IO.puts(:yo_mama)"} | &1]))}
   end
 
   @impl true

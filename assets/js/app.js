@@ -25,24 +25,18 @@ import Ace from "ace-builds"
 import "ace-builds/webpack-resolver";
 
 let Hooks = {}
-Hooks.AddCodeSnippet = {
+Hooks.LinkEditor = {
   mounted() {
-    this.el.addEventListener("click", _e => {
-      let editorPre = document.createElement("pre")
-      document.querySelector("#post").appendChild(editorPre)
-      editorPre.setAttribute("id", "editor-me")
-      let editor = Ace.edit("editor-me",{
-        maxLines: 50,
-        minLines: 10,
-        value: "var hello = 'world'" + "\n",
-        mode: "ace/mode/javascript",
-        bug: 1
-      })
-      editor.setTheme("ace/theme/twilight");
-      editor.session.setMode("ace/mode/javascript");
+    console.log("WE EHRE")
+    console.log(this)
+    let id = this.el.getAttribute("id")
+    this.editor = Ace.edit(id, {
+      maxLines: 50,
+      minLines: 10,
+      mode: "ace/mode/elixir",
     })
-
-
+    this.editor.setTheme("ace/theme/twilight");
+    this.editor.session.setMode("ace/mode/elixir");
   }
 }
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")

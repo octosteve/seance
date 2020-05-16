@@ -6,7 +6,7 @@ defmodule SeanceWeb.PostLive.New do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, socket |> assign(:code_examples, [])}
   end
 
   def render_stage(:new, assigns, socket) do
@@ -71,5 +71,10 @@ defmodule SeanceWeb.PostLive.New do
   def handle_event("initialize_post", %{"post" => attrs}, socket) do
     {:ok, post} = Blog.create_post(attrs)
     {:noreply, push_patch(socket, to: Routes.post_new_path(socket, :edit, post.id))}
+  end
+
+  @impl true
+  def handle_event("add_code", _params, socket) do
+  {:noreply, update(socket, :code_examples, &([%{id: "123", content: "IO.puts(:yo_mama)"} | &1]))}
   end
 end
