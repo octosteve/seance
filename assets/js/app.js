@@ -27,10 +27,7 @@ import "ace-builds/webpack-resolver";
 let Hooks = {}
 Hooks.LinkEditor = {
   mounted() {
-    console.log("WE EHRE")
-    console.log(this)
-    let id = this.el.getAttribute("id")
-    this.editor = Ace.edit(id, {
+    this.editor = Ace.edit(this.el, {
       maxLines: 50,
       minLines: 10,
       mode: "ace/mode/elixir",

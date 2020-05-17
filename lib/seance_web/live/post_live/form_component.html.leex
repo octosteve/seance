@@ -13,6 +13,8 @@
   <%= submit "Save", class: "btn btn-primary", phx_disable_with: "Saving..." %>
 </form>
 <%= for code <- @code_examples do %>
-<pre phx-hook="LinkEditor" id="editor-<%= code.id %>"><%= code.content %></pre>
+<span phx-update="ignore" id="editor-<%= code.id %>">
+<pre phx-hook="LinkEditor"><%= code.content %></pre>
+</span>
  <% end %>
 </div>
