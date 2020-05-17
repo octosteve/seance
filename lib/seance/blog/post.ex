@@ -1,11 +1,12 @@
 defmodule Seance.Blog.Post do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Seance.Blog.PostBodyNodeType
 
   schema "posts" do
-    field :body, :binary
-    field :tags, :string
     field :title, :string
+    field :tags, :array
+    field :body, {:array, PostBodyNodeType}
 
     timestamps()
   end
