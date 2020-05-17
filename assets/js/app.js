@@ -27,14 +27,19 @@ import "ace-builds/webpack-resolver";
 let Hooks = {}
 Hooks.LinkEditor = {
   mounted() {
-    this.editor = Ace.edit(this.el, {
+    let editor = Ace.edit(this.el, {
       maxLines: 50,
       minLines: 10,
       mode: "ace/mode/elixir",
+      theme: "ace/theme/solarized_light"
     })
-    this.editor.setTheme("ace/theme/twilight");
-    this.editor.session.setMode("ace/mode/elixir");
+    let id = this.el.dataset.id
+    editor.getSession().on("change", e => {
+      let content = editor.getSession().getValue();
+      this.pushEventTo(`#editor-${id}`, "code_updated", {id, content})
+    })
   }
+
 }
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})

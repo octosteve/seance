@@ -2,7 +2,6 @@
 <h2><%= @title %></h2>
 <%= link("preview", to: Routes.post_preview_path(@socket, :show, @post.id)) %>
 <%= link("add code", to: "#", "phx-click": "add_code", "phx-target": @myself) %>
-<%= inspect @code_examples %>
 <%= f = form_for @changeset, "#",
   id: "post-form",
   phx_target: @myself,
@@ -13,8 +12,8 @@
   <%= submit "Save", class: "btn btn-primary", phx_disable_with: "Saving..." %>
 </form>
 <%= for code <- @code_examples do %>
-<span phx-update="ignore" id="editor-<%= code.id %>">
-<pre phx-hook="LinkEditor"><%= code.content %></pre>
+<span phx-target="<%= @myself %>" phx-update="ignore" id="editor-<%= code.id %>">
+<pre data-id="<%= code.id %>" phx-hook="LinkEditor"><%= code.content %></pre>
 </span>
  <% end %>
 </div>

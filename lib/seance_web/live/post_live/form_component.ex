@@ -16,7 +16,13 @@ defmodule SeanceWeb.PostLive.FormComponent do
 
   @impl true
   def handle_event("add_code", _params, socket) do
-  {:noreply, update(socket, :code_examples, &([%{id: Ecto.UUID.generate(), content: "IO.puts(#{:os.system_time(:millisecond)}})"} | &1]))}
+  {:noreply, update(socket, :code_examples, &(&1 ++ [%{id: Ecto.UUID.generate(), content: "IO.puts(#{:os.system_time(:millisecond)}})"}]))}
+  end
+
+  @impl true
+  def handle_event("code_updated", %{"id" => id, "content" => content}, socket) do
+    IO.puts "received some code for id: #{id}, content: #{content}"
+    {:noreply, socket}
   end
 
   @impl true
