@@ -31,11 +31,6 @@ defmodule SeanceWeb.PostLive.New do
     )
   end
 
-  def render_stage(:preview, assigns, socket) do
-    post = assigns.post
-    live_component(socket, SeanceWeb.PostLive.PreviewComponent, id: post.id, post: post)
-  end
-
   def page_title(:new), do: "New Post"
   def page_title(:edit), do: "Author Mode"
   def page_title(:preview), do: "Preview Mode"
@@ -75,6 +70,6 @@ defmodule SeanceWeb.PostLive.New do
 
   @impl true
   def handle_event("add_code", _params, socket) do
-  {:noreply, update(socket, :code_examples, &([%{id: "123", content: "IO.puts(:yo_mama)"} | &1]))}
+    {:noreply, update(socket, :code_examples, &[%{id: "123", content: "IO.puts(:yo_mama)"} | &1])}
   end
 end

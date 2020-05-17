@@ -39,7 +39,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     command:
-        - ./bin/test.sh
+      - ./bin/test.sh
     volumes:
       - .:/app
       - seance-db-data:/var/lib/postgresql/data
@@ -48,6 +48,7 @@ services:
     environment:
       - PGDATABASE=seance_test
       - PGHOST
+      - PGPASSWORD
       - PGPORT
       - PGUSER
       - SIGNING_SECRET

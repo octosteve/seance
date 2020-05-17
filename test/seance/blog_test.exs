@@ -6,10 +6,14 @@ defmodule Seance.BlogTest do
   describe "posts" do
     alias Seance.Blog.Post
 
-    @valid_attrs %{body: "some body", tags: "some tags", title: "some title"}
+    @valid_attrs %{
+      body: [%{"type" => "markdown", "content" => "# Hello"}],
+      tags: ["tag1", "tag2"],
+      title: "some title"
+    }
     @update_attrs %{
-      body: "some updated body",
-      tags: "some updated tags",
+      body: [%{"type" => "markdown", "content" => "# Good Bye"}],
+      tags: ["tag3", "tag4"],
       title: "some updated title"
     }
     @invalid_attrs %{body: nil, tags: nil, title: nil}
@@ -35,8 +39,8 @@ defmodule Seance.BlogTest do
 
     test "create_post/1 with valid data creates a post" do
       assert {:ok, %Post{} = post} = Blog.create_post(@valid_attrs)
-      assert post.body == "some body"
-      assert post.tags == "some tags"
+      assert post.body == [%{"type" => "markdown", "content" => "# Hello"}]
+      assert post.tags == ["tag1", "tag2"]
       assert post.title == "some title"
     end
 
@@ -47,8 +51,9 @@ defmodule Seance.BlogTest do
     test "update_post/2 with valid data updates the post" do
       post = post_fixture()
       assert {:ok, %Post{} = post} = Blog.update_post(post, @update_attrs)
-      assert post.body == "some updated body"
-      assert post.tags == "some updated tags"
+      post = Blog.get_post!(post.id)
+      assert post.body == [%{"type" => "markdown", "content" => "# Good Bye"}]
+      assert post.tags == ["tag3", "tag4"]
       assert post.title == "some updated title"
     end
 

@@ -4,8 +4,8 @@ defmodule Seance.Repo.Migrations.CreatePosts do
   def change do
     create table(:posts) do
       add :title, :string
-      add :tags, :array, default: [], null: false
-      add :body, :map, default: [], null: false
+      add :tags, :map, null: false
+      add :body, :map, null: false
 
       timestamps()
     end
