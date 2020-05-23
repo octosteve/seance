@@ -8,6 +8,7 @@ defmodule SeanceWeb.PostLive.CodeComponent do
       </span>
     """
   end
+
   @impl true
   def handle_event("update", %{"node" => %{"content" => content}}, socket) do
     id = socket.assigns.id

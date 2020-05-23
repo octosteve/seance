@@ -70,8 +70,23 @@ defmodule SeanceWeb.PostLive.New do
 
   @impl true
   def handle_info({:update, id, content}, socket) do
-
     {:ok, post} = Blog.update_post_node(socket.assigns.post, id, content)
+
+    {:noreply, assign(socket, :post, post)}
+  end
+
+  def handle_info({:add_markdown_to_post}, socket) do
+    socket =
+      socket
+      |> assign(:post, Blog.add_markdown_to_post(socket.assigns.post))
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:add_code_to_post}, socket) do
+    socket =
+      socket
+      |> assign(:post, Blog.add_code_to_post(socket.assigns.post))
 
     {:noreply, socket}
   end
