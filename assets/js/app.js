@@ -27,16 +27,18 @@ import "ace-builds/webpack-resolver";
 let Hooks = {}
 Hooks.LinkEditor = {
   mounted() {
+    let language = this.el.dataset.language
+    let mode = `ace/mode/${language}`;
     let editor = Ace.edit(this.el, {
       maxLines: 50,
       minLines: 10,
-      mode: "ace/mode/elixir",
+      mode: mode,
       theme: "ace/theme/solarized_light"
     })
     let id = this.el.dataset.id
     editor.getSession().on("change", e => {
       let content = editor.getSession().getValue();
-      this.pushEventTo(`#editor-${id}`, "code_updated", {id, content})
+      this.pushEventTo(`#editor-${id}`, "update", {node: {id, content}})
     })
   }
 

@@ -67,4 +67,12 @@ defmodule SeanceWeb.PostLive.New do
     {:ok, post} = Blog.create_post(attrs)
     {:noreply, push_patch(socket, to: Routes.post_new_path(socket, :edit, post.id))}
   end
+
+  @impl true
+  def handle_info({:update, id, content}, socket) do
+
+    {:ok, post} = Blog.update_post_node(socket.assigns.post, id, content)
+
+    {:noreply, socket}
+  end
 end

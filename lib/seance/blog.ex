@@ -68,16 +68,15 @@ defmodule Seance.Blog do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_post(%EditablePost{} = post, attrs) do
-    attrs =
+  def update_post_node(%EditablePost{} = post, id, content) do
+    body =
       post
-      |> EditablePost.update_attrs(attrs)
-      |> IO.inspect(label: "CONVERTED ATTRS")
+      |> EditablePost.update_post_node(id, content)
 
     {:ok, post} =
       post
       |> EditablePost.for_db()
-      |> Post.changeset(attrs)
+      |> Ecto.Changeset.change(%{body: body})
       |> Repo.update()
 
     {:ok, EditablePost.from_db(post)}
@@ -86,6 +85,11 @@ defmodule Seance.Blog do
   def add_code_to_post(%EditablePost{} = post) do
     post
     |> EditablePost.add_code_node()
+  end
+
+  def add_markdown_to_post(%EditablePost{} = post) do
+    post
+    |> EditablePost.add_markdown_node()
   end
 
   @doc """

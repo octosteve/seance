@@ -11,7 +11,7 @@ defmodule SeanceWeb.PostLive.FormComponent do
      socket
      |> assign(assigns)
      |> assign(:changeset, changeset)
-     |> assign(:code_examples, [])}
+     }
   end
 
   @impl true
@@ -24,36 +24,33 @@ defmodule SeanceWeb.PostLive.FormComponent do
   end
 
   @impl true
-  def handle_event("code_updated", %{"id" => id, "content" => content}, socket) do
-    IO.puts("received some code for id: #{id}, content: #{content}")
+  def handle_event("add_markdown", _params, socket) do
+    socket =
+      socket
+      |> assign(:post, Blog.add_markdown_to_post(socket.assigns.post))
+
     {:noreply, socket}
   end
 
   @impl true
-  def handle_event("update_post", %{"post" => post_params}, socket) do
-    IO.inspect(post_params, label: "POST PARAMS")
-    {:ok, post} = Blog.update_post(socket.assigns.post, post_params)
-    {:noreply, assign(socket, :post, post)}
+  def handle_event("code_updated", %{"id" => id, "content" => content}, socket) do
+    send(self(), {:update, id, content})
+    {:noreply, socket}
   end
 
-  def render_node(%Seance.Blog.BodyTypes.Markdown{} = node, assigns) do
-    ~L"""
-      <textarea
-          phx_debounce="2000"
-          phx_value-id="<%= node.id %>"
-          class= "form-control"
-          name="post[body][<%= node.id %>]"
-          id="<%= node.id %>">
-          <%= node.content %>
-      </textarea>
-    """
+  def render_node(socket, %Seance.Blog.BodyTypes.Markdown{} = node, assigns) do
+    live_component(socket, SeanceWeb.PostLive.MarkdownComponent,
+      id: node.id,
+      content: node.content,
+      changeset: assigns.changeset
+    )
   end
 
-  def render_node(%Seance.Blog.BodyTypes.Code{} = node, assigns) do
-    ~L"""
-      <span phx-target="<%= @myself %>" phx-update="ignore" id="editor-<%= node.id %>">
-        <pre data-language="<%= node.language %> data-id="<%= node.id %>" phx-hook="LinkEditor"><%= node.content %></pre>
-      </span>
-    """
+  def render_node(socket, %Seance.Blog.BodyTypes.Code{} = node, assigns) do
+    live_component(socket, SeanceWeb.PostLive.CodeComponent,
+      id: node.id,
+      content: node.content,
+      language: node.language
+    )
   end
 end
