@@ -1,15 +1,42 @@
 defmodule Seance.Blog.EditablePost do
-  defstruct [:title, :tags, :body]
+  defstruct [:id, :title, :tags, :body]
   alias Seance.Blog.Post
   alias Seance.Blog.BodyTypes.Markdown
   alias Seance.Blog.BodyTypes.Code
 
-  def from_db(%Post{title: title, tags: tags, body: body}) do
-    %__MODULE__{title: title, tags: tags, body: convert_body_from_db(body)}
+  def update_attrs(%__MODULE__{} = post, attrs) do
+    Map.new(attrs, fn
+      {"body", m} ->
+        body =
+          Enum.map(post.body, fn node ->
+            if m[node.id] do
+              %{node | content: m[node.id]}
+            else
+              node
+            end
+          end)
+
+        {"body", convert_body_for_db(body)}
+
+      rest ->
+        rest
+    end)
   end
 
-  def for_db(%__MODULE__{title: title, tags: tags, body: body} = post) do
-    %Post{title: title, tags: tags, body: convert_body_for_db(body)}
+  def add_code_node(%__MODULE__{} = post) do
+    update_in(post.body, &(&1 ++ [Code.new()]))
+  end
+
+  def from_db(%Post{id: id, title: title, tags: tags, body: []}) do
+    %__MODULE__{id: id, title: title, tags: tags, body: [Markdown.new()]}
+  end
+
+  def from_db(%Post{id: id, title: title, tags: tags, body: body}) do
+    %__MODULE__{id: id, title: title, tags: tags, body: convert_body_from_db(body)}
+  end
+
+  def for_db(%__MODULE__{id: id, title: title, tags: tags, body: body} = post) do
+    %Post{id: id, title: title, tags: tags, body: convert_body_for_db(body)}
   end
 
   def convert_body_from_db([]), do: []

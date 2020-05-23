@@ -7,6 +7,7 @@ defmodule Seance.Blog do
   alias Seance.Repo
 
   alias Seance.Blog.Post
+  alias Seance.Blog.EditablePost
 
   @doc """
   Returns the list of posts.
@@ -35,7 +36,7 @@ defmodule Seance.Blog do
       ** (Ecto.NoResultsError)
 
   """
-  def get_post!(id), do: Repo.get!(Post, id)
+  def get_post!(id), do: Repo.get!(Post, id) |> EditablePost.from_db()
 
   @doc """
   Creates a post.
@@ -67,10 +68,24 @@ defmodule Seance.Blog do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_post(%Post{} = post, attrs) do
+  def update_post(%EditablePost{} = post, attrs) do
+    attrs =
+      post
+      |> EditablePost.update_attrs(attrs)
+      |> IO.inspect(label: "CONVERTED ATTRS")
+
+    {:ok, post} =
+      post
+      |> EditablePost.for_db()
+      |> Post.changeset(attrs)
+      |> Repo.update()
+
+    {:ok, EditablePost.from_db(post)}
+  end
+
+  def add_code_to_post(%EditablePost{} = post) do
     post
-    |> Post.changeset(attrs)
-    |> Repo.update()
+    |> EditablePost.add_code_node()
   end
 
   @doc """
@@ -98,7 +113,9 @@ defmodule Seance.Blog do
       %Ecto.Changeset{data: %Post{}}
 
   """
-  def change_post(%Post{} = post, attrs \\ %{}) do
-    Post.changeset(post, attrs)
+  def change_post(%EditablePost{} = post, attrs \\ %{}) do
+    post
+    |> EditablePost.for_db()
+    |> Post.changeset(attrs)
   end
 end

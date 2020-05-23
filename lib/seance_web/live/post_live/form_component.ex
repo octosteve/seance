@@ -16,13 +16,11 @@ defmodule SeanceWeb.PostLive.FormComponent do
 
   @impl true
   def handle_event("add_code", _params, socket) do
-    {:noreply,
-     update(
-       socket,
-       :code_examples,
-       &(&1 ++
-           [%{id: Ecto.UUID.generate(), content: "IO.puts(#{:os.system_time(:millisecond)}})"}])
-     )}
+    socket =
+      socket
+      |> assign(:post, Blog.add_code_to_post(socket.assigns.post))
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -33,7 +31,29 @@ defmodule SeanceWeb.PostLive.FormComponent do
 
   @impl true
   def handle_event("update_post", %{"post" => post_params}, socket) do
+    IO.inspect(post_params, label: "POST PARAMS")
     {:ok, post} = Blog.update_post(socket.assigns.post, post_params)
     {:noreply, assign(socket, :post, post)}
+  end
+
+  def render_node(%Seance.Blog.BodyTypes.Markdown{} = node, assigns) do
+    ~L"""
+      <textarea
+          phx_debounce="2000"
+          phx_value-id="<%= node.id %>"
+          class= "form-control"
+          name="post[body][<%= node.id %>]"
+          id="<%= node.id %>">
+          <%= node.content %>
+      </textarea>
+    """
+  end
+
+  def render_node(%Seance.Blog.BodyTypes.Code{} = node, assigns) do
+    ~L"""
+      <span phx-target="<%= @myself %>" phx-update="ignore" id="editor-<%= node.id %>">
+        <pre data-language="<%= node.language %> data-id="<%= node.id %>" phx-hook="LinkEditor"><%= node.content %></pre>
+      </span>
+    """
   end
 end

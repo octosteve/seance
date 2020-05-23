@@ -67,9 +67,4 @@ defmodule SeanceWeb.PostLive.New do
     {:ok, post} = Blog.create_post(attrs)
     {:noreply, push_patch(socket, to: Routes.post_new_path(socket, :edit, post.id))}
   end
-
-  @impl true
-  def handle_event("add_code", _params, socket) do
-    {:noreply, update(socket, :code_examples, &[%{id: "123", content: "IO.puts(:yo_mama)"} | &1])}
-  end
 end

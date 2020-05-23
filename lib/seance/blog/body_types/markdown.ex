@@ -2,6 +2,10 @@ defmodule Seance.Blog.BodyTypes.Markdown do
   @behaviour Seance.Blog.BodyTypeBehaviour
   defstruct [:id, :content]
 
+  def new(content \\ "Hello there") do
+    %__MODULE__{id: Ecto.UUID.generate(), content: content}
+  end
+
   def from_node(%{"id" => id, "content" => content}) do
     struct!(__MODULE__, id: id, content: content)
   end
