@@ -89,10 +89,10 @@ defmodule SeanceWeb.PostLive.New do
     {:noreply, socket}
   end
 
-  def handle_info({:add_code_to_post}, socket) do
+  def handle_info({:add_code_to_post, filename}, socket) do
     socket =
       socket
-      |> assign(:post, Blog.add_code_to_post(socket.assigns.post))
+      |> assign(:post, Blog.add_code_to_post(socket.assigns.post, filename))
 
     {:noreply, socket}
   end

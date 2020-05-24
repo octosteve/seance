@@ -1,0 +1,6 @@
+<%= f = form_for @code, "#", [phx_submit: :add_code, phx_target: @myself] %>
+    <%= label f, :filename %>
+    <%= text_input f, :filename %>
+    <%= error_tag f, :filename %>
+    <%= submit "Add" %>
+</form>

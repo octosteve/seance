@@ -96,7 +96,8 @@ defmodule Seance.Blog do
     {:ok, EditablePost.from_db(post)}
   end
 
-  def add_code_to_post(%EditablePost{} = post) do
+  def add_code_to_post(%EditablePost{} = post, filename) do
+    IO.puts "Creating file #{filename} on Github"
     post
     |> EditablePost.add_code_node()
   end

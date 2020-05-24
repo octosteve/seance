@@ -4,3 +4,4 @@ export PGPASSWORD=postgres
 export PGPORT=5432
 export PGUSER=postgres
 export SIGNING_SECRET="LvIp4CUBQkFzMSu9ClZHeX6TtPg2ca3F1kUnmLOndZ3Iq3BI3Pnf2odej9zM2GxD"
+export GITHUB_AUTH_TOKEN={{Personal Access Token}}
