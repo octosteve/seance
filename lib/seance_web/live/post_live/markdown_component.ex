@@ -3,6 +3,9 @@ defmodule SeanceWeb.PostLive.MarkdownComponent do
 
   def render(assigns) do
     ~L"""
+    <button type="button" class="close" aria-label="Close" phx-click="delete" phx-value-id="<%= @id %>">
+      <span aria-hidden="true">&times;</span>
+    </button>
     <%= f = form_for @changeset, "#",
     phx_target: @myself,
     phx_change: "update" %>

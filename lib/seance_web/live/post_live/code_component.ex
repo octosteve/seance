@@ -3,6 +3,9 @@ defmodule SeanceWeb.PostLive.CodeComponent do
 
   def render(assigns) do
     ~L"""
+      <button type="button" class="close" aria-label="Close" phx-click="delete" phx-value-id="<%= @id %>">
+        <span aria-hidden="true">&times;</span>
+      </button>
       <span phx-update="ignore" phx-target="<%= @myself %>" id="editor-<%= @id %>">
         <pre data-language="<%= @language %>" data-id="<%= @id %>" phx-hook="LinkEditor"><%= @content %></pre>
       </span>

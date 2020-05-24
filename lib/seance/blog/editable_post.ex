@@ -16,6 +16,18 @@ defmodule Seance.Blog.EditablePost do
     |> convert_body_for_db
   end
 
+  def remove_post_node(%__MODULE__{} = post, id) do
+    post.body
+    |> Enum.reduce([], fn node, acc ->
+      if node.id == id do
+        acc
+      else
+        acc ++ [node]
+      end
+    end)
+    |> convert_body_for_db
+  end
+
   def add_code_node(%__MODULE__{} = post) do
     update_in(post.body, &(&1 ++ [Code.new()]))
   end

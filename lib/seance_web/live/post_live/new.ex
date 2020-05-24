@@ -69,6 +69,12 @@ defmodule SeanceWeb.PostLive.New do
   end
 
   @impl true
+  def handle_event("delete", %{"id" => id}, socket) do
+    {:ok, post} = Blog.remove_post_node(socket.assigns.post, id)
+    {:noreply, assign(socket, :post, post)}
+  end
+
+  @impl true
   def handle_info({:update, id, content}, socket) do
     {:ok, post} = Blog.update_post_node(socket.assigns.post, id, content)
 

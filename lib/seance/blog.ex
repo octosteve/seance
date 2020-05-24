@@ -82,6 +82,20 @@ defmodule Seance.Blog do
     {:ok, EditablePost.from_db(post)}
   end
 
+  def remove_post_node(%EditablePost{} = post, id) do
+    body =
+      post
+      |> EditablePost.remove_post_node(id)
+
+    {:ok, post} =
+      post
+      |> EditablePost.for_db()
+      |> Ecto.Changeset.change(%{body: body})
+      |> Repo.update()
+
+    {:ok, EditablePost.from_db(post)}
+  end
+
   def add_code_to_post(%EditablePost{} = post) do
     post
     |> EditablePost.add_code_node()
