@@ -81,6 +81,11 @@ defmodule SeanceWeb.PostLive.New do
     {:noreply, assign(socket, :post, post)}
   end
 
+  def handle_info({:delete, id}, socket) do
+    {:ok, post} = Blog.remove_post_node(socket.assigns.post, id)
+    {:noreply, assign(socket, :post, post)}
+  end
+
   def handle_info({:add_markdown_to_post}, socket) do
     socket =
       socket
@@ -89,10 +94,10 @@ defmodule SeanceWeb.PostLive.New do
     {:noreply, socket}
   end
 
-  def handle_info({:add_code_to_post, filename}, socket) do
+  def handle_info({:add_code_to_post, gist}, socket) do
     socket =
       socket
-      |> assign(:post, Blog.add_code_to_post(socket.assigns.post, filename))
+      |> assign(:post, Blog.add_code_to_post(socket.assigns.post, gist))
 
     {:noreply, socket}
   end

@@ -96,10 +96,9 @@ defmodule Seance.Blog do
     {:ok, EditablePost.from_db(post)}
   end
 
-  def add_code_to_post(%EditablePost{} = post, filename) do
-    IO.puts "Creating file #{filename} on Github"
+  def add_code_to_post(%EditablePost{} = post, gist) do
     post
-    |> EditablePost.add_code_node()
+    |> EditablePost.add_code_node(gist)
   end
 
   def add_markdown_to_post(%EditablePost{} = post) do
@@ -132,7 +131,14 @@ defmodule Seance.Blog do
       %Ecto.Changeset{data: %Post{}}
 
   """
-  def change_post(%EditablePost{} = post, attrs \\ %{}) do
+  def change_post(post, attrs \\ %{})
+
+  def change_post(%Post{} = post, attrs) do
+    post
+    |> Post.changeset(attrs)
+  end
+
+  def change_post(%EditablePost{} = post, attrs) do
     post
     |> EditablePost.for_db()
     |> Post.changeset(attrs)

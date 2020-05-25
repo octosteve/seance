@@ -28,6 +28,7 @@ services:
       - PGPORT
       - PGUSER
       - SIGNING_SECRET
+      - GITHUB_AUTH_TOKEN
     ports:
       - "4000:4000"
     links:
@@ -52,6 +53,7 @@ services:
       - PGPORT
       - PGUSER
       - SIGNING_SECRET
+      - GITHUB_AUTH_TOKEN
   release:
     build:
       context: .
@@ -63,5 +65,6 @@ services:
       - PGPORT
       - PGUSER
       - SIGNING_SECRET
+      - GITHUB_AUTH_TOKEN
     ports:
       - "4000:4000"

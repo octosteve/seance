@@ -28,7 +28,7 @@ let Hooks = {}
 Hooks.LinkEditor = {
   mounted() {
     let language = this.el.dataset.language
-    let mode = `ace/mode/${language}`;
+    let mode = `ace/mode/${language.toLowerCase()}`;
     let editor = Ace.edit(this.el, {
       maxLines: 50,
       minLines: 10,

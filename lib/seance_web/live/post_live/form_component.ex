@@ -17,8 +17,7 @@ defmodule SeanceWeb.PostLive.FormComponent do
 
   @impl true
   def handle_event("add_code", _params, socket) do
-#    send(self(), {:add_code_to_post, filename})
-    {:noreply, socket |> assign(:adding_code, true) |> assign(:code, Code.changeset)}
+    {:noreply, socket |> assign(:adding_code, true) |> assign(:code, Code.changeset())}
   end
 
   @impl true
@@ -45,7 +44,9 @@ defmodule SeanceWeb.PostLive.FormComponent do
     live_component(socket, SeanceWeb.PostLive.CodeComponent,
       id: node.id,
       content: node.content,
-      language: node.language
+      language: node.language,
+      gist_id: node.gist_id,
+      filename: node.filename
     )
   end
 end
