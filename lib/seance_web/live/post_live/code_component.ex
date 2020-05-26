@@ -14,10 +14,11 @@ defmodule SeanceWeb.PostLive.CodeComponent do
 
   def render(assigns) do
     ~L"""
-    <div id="<%= @id %>">
+    <div class="code-component">
       <button type="button" class="close" aria-label="Close" phx-target="<%= @myself %>" phx-click="delete">
         <span aria-hidden="true">&times;</span>
       </button>
+      <span class="filename"><%= @filename %></span>
       <span phx-update="ignore" phx-target="<%= @myself %>" id="editor-<%= @id %>">
         <pre data-language="<%= @language %>" data-id="<%= @id %>" phx-hook="LinkEditor"><%= @content %></pre>
       </span>
