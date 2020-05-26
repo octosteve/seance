@@ -35,7 +35,7 @@ defmodule SeanceWeb.PostLive.MarkdownComponent do
     |> String.split("\n")
     |> Enum.reduce(0, fn line, total ->
       if String.length(line) > 80 do
-        total + 1 + (div String.length(line), 80)
+        total + 1 + div(String.length(line), 80)
       else
         total + 1
       end

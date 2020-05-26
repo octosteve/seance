@@ -1,0 +1,21 @@
+<ul class="list-group list-group-horizontal">
+  <li class="list-group-item"><%= link("Show rendered", to: Routes.post_preview_path(@conn, :show, @post.id)) %></li>
+  <li class="list-group-item"><%= link("Edit", to: Routes.post_new_path(@conn, :edit, @post.id)) %></li>
+</ul>
+
+<div class="container">
+---<br />
+title: "<%= @post.title %>"<br />
+tags: <%= inspect @post.tags %><br />
+---<br />
+
+<%= for {type, content} <- @preview do  %>
+  <%= if type == :markdown do %>
+    <%= raw content %>
+  <% end %>
+
+  <%= if type == :code do %>
+  <%= content %>
+   <% end %>
+<% end %>
+</div>

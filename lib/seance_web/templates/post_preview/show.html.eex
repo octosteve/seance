@@ -1,4 +1,9 @@
-<%= link("edit", to: Routes.post_new_path(@conn, :edit, @post.id)) %>
+<ul class="list-group list-group-horizontal">
+  <li class="list-group-item"><%= link("Show exportable Markdown", to: Routes.post_preview_path(@conn, :show, @post.id, markdown: true)) %></li>
+  <li class="list-group-item"><%= link("Edit", to: Routes.post_new_path(@conn, :edit, @post.id)) %></li>
+</ul>
+
 <div class="container">
+<h1><%= @post.title %></h1>
 <%= raw @preview %>
 </div>

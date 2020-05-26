@@ -1,7 +1,12 @@
 <div id="post">
 <h2><%= @title %></h2>
-<%= link("preview", to: Routes.post_preview_path(@socket, :show, @post.id)) %>
-<%= link("add code", to: "#", "phx-click": "add_code", "phx-target": @myself) %>
+<ul class="list-group list-group-horizontal">
+  <li class="list-group-item"><%= link("Preview", to: Routes.post_preview_path(@socket, :show, @post.id)) %></li>
+  <li class="list-group-item"><%= link("Add Code", to: "#", "phx-click": "add_code", "phx-target": @myself) %></li>
+  <li class="list-group-item"><%= link("Add Markdown", to: "#", "phx-click": "add_markdown", "phx-target": @myself) %></li>
+</ul>
+
+
 <%= if @adding_code do %>
   <%= live_modal(
             @socket,
@@ -12,7 +17,7 @@
             return_to: Routes.post_new_path(@socket, :edit, @post.id)
           ) %>
 <% end %>
-<%= link("add markdown", to: "#", "phx-click": "add_markdown", "phx-target": @myself) %>
+
   <%= for node <- @post.body do %>
     <%= render_node(@socket, node, assigns) %>
   <% end %>
