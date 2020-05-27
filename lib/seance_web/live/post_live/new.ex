@@ -7,7 +7,10 @@ defmodule SeanceWeb.PostLive.New do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(:adding_code, false)}
+    {:ok,
+     socket
+     |> assign(:adding_code, false)
+     |> assign(:insert_after, 0)}
   end
 
   def render_stage(:new, assigns, socket) do
@@ -78,30 +81,24 @@ defmodule SeanceWeb.PostLive.New do
     {:noreply, assign(socket, :post, post)}
   end
 
-  def handle_info({:add_markdown_to_post}, socket) do
-    {:ok, post} = Blog.add_markdown_to_post(socket.assigns.post)
-
-    socket =
-      socket
-      |> assign(:post, post)
-
-    {:noreply, socket}
-  end
-
   def handle_info({:add_code_to_post, gist}, socket) do
-    {:ok, post} = Blog.add_code_to_post(socket.assigns.post, gist)
+    insert_after = socket.assigns.insert_after
+    IO.inspect(insert_after, label: "GOING TO INSERT AFTER THIS THING")
+    {:ok, post} = Blog.add_code_to_post(socket.assigns.post, insert_after, gist)
 
     socket =
       socket
       |> assign(:post, post)
+      |> assign(:insert_after, nil)
 
     {:noreply, socket |> assign(:post, post) |> assign(:adding_code, false)}
   end
 
-  def handle_info(:collect_code_file, socket) do
+  def handle_info({:collect_code_file, index}, socket) do
     {:noreply,
      socket
      |> assign(:adding_code, true)
+     |> assign(:insert_after, index)
      |> assign(:code, Code.changeset())}
   end
 

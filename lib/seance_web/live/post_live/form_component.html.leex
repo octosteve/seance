@@ -2,7 +2,7 @@
 <%= link("Preview", to: Routes.post_preview_path(@socket, :show, @post.id)) %>
 <h2><%= @title %></h2>
 
-<%= for node <- @post.body do %>
-  <%= render_node(@socket, node, assigns) %>
+<%= for {node, index} <- Enum.with_index(@post.body) do %>
+  <%= render_node(@socket, index, node, assigns) %>
 <% end %>
 </div>

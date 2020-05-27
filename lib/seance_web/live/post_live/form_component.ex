@@ -20,21 +20,23 @@ defmodule SeanceWeb.PostLive.FormComponent do
     {:noreply, socket}
   end
 
-  def render_node(socket, %Seance.Blog.BodyTypes.Markdown{} = node, assigns) do
+  def render_node(socket, index, %Seance.Blog.BodyTypes.Markdown{} = node, assigns) do
     live_component(socket, SeanceWeb.PostLive.MarkdownComponent,
       id: node.id,
       content: node.content,
-      changeset: assigns.changeset
+      changeset: assigns.changeset,
+      index: index
     )
   end
 
-  def render_node(socket, %Seance.Blog.BodyTypes.Code{} = node, assigns) do
+  def render_node(socket, index, %Seance.Blog.BodyTypes.Code{} = node, assigns) do
     live_component(socket, SeanceWeb.PostLive.CodeComponent,
       id: node.id,
       content: node.content,
       language: node.language,
       gist_id: node.gist_id,
-      filename: node.filename
+      filename: node.filename,
+      index: index
     )
   end
 end

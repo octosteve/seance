@@ -28,8 +28,19 @@ defmodule Seance.Blog.EditablePost do
     |> convert_body_for_db
   end
 
-  def add_code_node(%__MODULE__{} = post, gist) do
-    update_in(post.body, &(&1 ++ [Code.new(gist)]))
+  def add_code_node(%__MODULE__{} = post, insert_after, gist) do
+    update_in(post.body, fn list ->
+      case Enum.at(list, insert_after + 1) do
+        %Markdown{} ->
+          list
+          |> List.insert_at(insert_after + 1, Code.new(gist))
+
+        _ ->
+          list
+          |> List.insert_at(insert_after + 1, Code.new(gist))
+          |> List.insert_at(insert_after + 2, Markdown.new())
+      end
+    end)
   end
 
   def add_markdown_node(%__MODULE__{} = post) do

@@ -26,10 +26,11 @@ defmodule SeanceWeb.PostLive.MarkdownComponent do
     backtick_pattern = ~r/^```\z/m
 
     if Regex.match?(backtick_pattern, content) do
+      index = socket.assigns.index
       content = String.replace(content, backtick_pattern, "")
 
       send(self(), {:update, id, content})
-      send(self(), :collect_code_file)
+      send(self(), {:collect_code_file, index})
       {:noreply, socket}
     else
       send(self(), {:update, id, content})
