@@ -1,7 +1,7 @@
 <%= f = form_for @code, "#", [phx_submit: :add_code, phx_target: @myself] %>
   <div class="form-group">
     <%= label f, :filename %>
-    <%= text_input f, :filename, class: "form-control"%>
+    <%= text_input f, :filename, class: "form-control", phx_hook: "AutoFocus" %>
     <%= error_tag f, :filename %>
   </div>
     <%= submit "Add", class: "btn btn-primary" %>

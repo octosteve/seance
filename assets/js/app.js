@@ -18,9 +18,9 @@ window.$ = $;
 //     import socket from "./socket"
 //
 import "phoenix_html"
-import {Socket} from "phoenix"
+import { Socket } from "phoenix"
 import NProgress from "nprogress"
-import {LiveSocket} from "phoenix_live_view"
+import { LiveSocket } from "phoenix_live_view"
 import Ace from "ace-builds"
 import "ace-builds/webpack-resolver";
 
@@ -39,13 +39,19 @@ Hooks.LinkEditor = {
     editor.getSession().setTabSize(2)
     editor.getSession().on("change", e => {
       let content = editor.getSession().getValue();
-      this.pushEventTo(`#editor-${id}`, "update", {node: {id, content}})
+      this.pushEventTo(`#editor-${id}`, "update", { node: { id, content } })
     })
   }
 
 }
+
+Hooks.AutoFocus = {
+  mounted() {
+    this.el.focus()
+  }
+}
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
+let liveSocket = new LiveSocket("/live", Socket, { params: { _csrf_token: csrfToken }, hooks: Hooks })
 
 // Show progress bar on live navigation and form submits
 window.addEventListener("phx:page-loading-start", info => NProgress.start())

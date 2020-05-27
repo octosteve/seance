@@ -43,10 +43,6 @@ defmodule Seance.Blog.EditablePost do
     end)
   end
 
-  def add_markdown_node(%__MODULE__{} = post) do
-    update_in(post.body, &(&1 ++ [Markdown.new()]))
-  end
-
   def from_db(%Post{id: id, title: title, tags: tags, body: []}) do
     %__MODULE__{id: id, title: title, tags: tags, body: [Markdown.new()]}
   end
