@@ -76,8 +76,8 @@ defmodule SeanceWeb.PostLive.New do
     {:noreply, assign(socket, :post, post)}
   end
 
-  def handle_info({:delete, id}, socket) do
-    {:ok, post} = Blog.remove_post_node(socket.assigns.post, id)
+  def handle_info({:delete, index}, socket) do
+    {:ok, post} = Blog.remove_post_node(socket.assigns.post, index)
     {:noreply, assign(socket, :post, post)}
   end
 

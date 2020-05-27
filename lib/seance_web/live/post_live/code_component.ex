@@ -38,7 +38,7 @@ defmodule SeanceWeb.PostLive.CodeComponent do
   def handle_event("delete", _params, socket) do
     GSAfraidOfGithub.stop(socket.assigns.gist_server)
     Seance.Clients.Github.delete_gist(socket.assigns.gist_id)
-    send(self(), {:delete, socket.assigns.id})
+    send(self(), {:delete, socket.assigns.index})
     {:noreply, socket}
   end
 end

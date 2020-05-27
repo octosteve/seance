@@ -16,16 +16,25 @@ defmodule Seance.Blog.EditablePost do
     |> convert_body_for_db
   end
 
-  def remove_post_node(%__MODULE__{} = post, id) do
-    post.body
-    |> Enum.reduce([], fn node, acc ->
-      if node.id == id do
-        acc
-      else
-        acc ++ [node]
+  def remove_post_node(%__MODULE__{} = post, index) do
+    update_in(post.body, fn list ->
+      case {Enum.at(list, index - 1), Enum.at(list, index + 1)} do
+        {%Markdown{}, %Markdown{content: overflow_content}} ->
+          list
+          |> List.delete_at(index)
+          |> List.delete_at(index)
+          |> List.update_at(
+            index - 1,
+            &Map.update(&1, :content, "", fn content -> content <> " " <> overflow_content end)
+          )
+          |> convert_body_for_db()
+
+        _ ->
+          list
+          |> List.delete_at(index)
+          |> convert_body_for_db()
       end
     end)
-    |> convert_body_for_db
   end
 
   def add_code_node(%__MODULE__{} = post, insert_after, gist) do

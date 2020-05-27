@@ -82,10 +82,10 @@ defmodule Seance.Blog do
     {:ok, EditablePost.from_db(post)}
   end
 
-  def remove_post_node(%EditablePost{} = post, id) do
-    body =
+  def remove_post_node(%EditablePost{} = post, index) do
+    %{body: body} =
       post
-      |> EditablePost.remove_post_node(id)
+      |> EditablePost.remove_post_node(index)
 
     {:ok, post} =
       post
