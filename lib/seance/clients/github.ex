@@ -3,8 +3,6 @@ defmodule Github.Gist do
 end
 
 defmodule Seance.Clients.Github do
-  @token System.get_env("GITHUB_AUTH_TOKEN")
-  @headers [Authorization: "token #{@token}"]
   def create_gist(filename) do
     request_body =
       %{files: %{filename => %{content: "tk"}}}
@@ -14,7 +12,7 @@ defmodule Seance.Clients.Github do
       HTTPoison.post(
         "https://api.github.com/gists",
         request_body,
-        @headers
+        headers()
       )
 
     %{"id" => id} = parsed = body |> Jason.decode!()
@@ -29,11 +27,16 @@ defmodule Seance.Clients.Github do
       |> Jason.encode!()
 
     {:ok, %{status_code: 200}} =
-      HTTPoison.patch("https://api.github.com/gists/#{gist_id}", request_body, @headers)
+      HTTPoison.patch("https://api.github.com/gists/#{gist_id}", request_body, headers())
   end
 
   def delete_gist(gist_id) do
     {:ok, %{status_code: 204}} =
-      HTTPoison.delete("https://api.github.com/gists/#{gist_id}", @headers)
+      HTTPoison.delete("https://api.github.com/gists/#{gist_id}", headers())
+  end
+
+  defp headers do
+    token = System.get_env("GITHUB_AUTH_TOKEN")
+    [Authorization: "token #{token}"]
   end
 end

@@ -1,1 +1,11 @@
 <%= render_stage(@live_action, assigns, @socket) %>
+<%= if @adding_code do %>
+  <%= live_modal(
+      @socket,
+      SeanceWeb.PostLive.AddCodeComponent,
+      id: :add_code,
+      post: assigns.post,
+      code: assigns.code,
+      on_return: {:call, fn -> send(self(), :cancel_code_colletion) end }
+) %>
+<% end %>

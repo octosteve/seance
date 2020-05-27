@@ -2,7 +2,7 @@ defmodule Seance.Blog.BodyTypes.Markdown do
   @behaviour Seance.Blog.BodyTypeBehaviour
   defstruct [:id, :content]
 
-  def new(content \\ "Hello there") do
+  def new(content \\ "") do
     %__MODULE__{id: Ecto.UUID.generate(), content: content}
   end
 

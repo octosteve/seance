@@ -97,13 +97,34 @@ defmodule Seance.Blog do
   end
 
   def add_code_to_post(%EditablePost{} = post, gist) do
-    post
-    |> EditablePost.add_code_node(gist)
+    %{body: body} =
+      post =
+      post
+      |> EditablePost.add_code_node(gist)
+      |> EditablePost.add_markdown_node()
+      |> EditablePost.for_db()
+
+    {:ok, post} =
+      post
+      |> Ecto.Changeset.change(%{body: body})
+      |> Repo.update()
+
+    {:ok, EditablePost.from_db(post)}
   end
 
   def add_markdown_to_post(%EditablePost{} = post) do
-    post
-    |> EditablePost.add_markdown_node()
+    %{body: body} =
+      post =
+      post
+      |> EditablePost.add_markdown_node()
+      |> EditablePost.for_db()
+
+    {:ok, post} =
+      post
+      |> Ecto.Changeset.change(%{body: body})
+      |> Repo.update()
+
+    {:ok, EditablePost.from_db(post)}
   end
 
   @doc """

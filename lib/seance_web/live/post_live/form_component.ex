@@ -11,19 +11,7 @@ defmodule SeanceWeb.PostLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)
-     |> assign(:adding_code, false)}
-  end
-
-  @impl true
-  def handle_event("add_code", _params, socket) do
-    {:noreply, socket |> assign(:adding_code, true) |> assign(:code, Code.changeset())}
-  end
-
-  @impl true
-  def handle_event("add_markdown", _params, socket) do
-    send(self(), {:add_markdown_to_post})
-    {:noreply, socket}
+     |> assign(:changeset, changeset)}
   end
 
   @impl true

@@ -3,6 +3,13 @@ defmodule SeanceWeb.ModalComponent do
 
   @impl true
   def handle_event("close", _, socket) do
-    {:noreply, push_patch(socket, to: socket.assigns.return_to)}
+    case socket.assigns.on_return do
+      {:redirect, path} ->
+        {:noreply, push_patch(socket, to: path)}
+
+      {:call, func} ->
+        func.()
+        {:noreply, socket}
+    end
   end
 end

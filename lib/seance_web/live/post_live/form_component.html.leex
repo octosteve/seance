@@ -1,24 +1,8 @@
 <div id="post">
+<%= link("Preview", to: Routes.post_preview_path(@socket, :show, @post.id)) %>
 <h2><%= @title %></h2>
-<ul class="list-group list-group-horizontal">
-  <li class="list-group-item"><%= link("Preview", to: Routes.post_preview_path(@socket, :show, @post.id)) %></li>
-  <li class="list-group-item"><%= link("Add Code", to: "#", "phx-click": "add_code", "phx-target": @myself) %></li>
-  <li class="list-group-item"><%= link("Add Markdown", to: "#", "phx-click": "add_markdown", "phx-target": @myself) %></li>
-</ul>
 
-
-<%= if @adding_code do %>
-  <%= live_modal(
-            @socket,
-            SeanceWeb.PostLive.AddCodeComponent,
-            id: :add_code,
-            post: assigns.post,
-            code: assigns.code,
-            return_to: Routes.post_new_path(@socket, :edit, @post.id)
-          ) %>
+<%= for node <- @post.body do %>
+  <%= render_node(@socket, node, assigns) %>
 <% end %>
-
-  <%= for node <- @post.body do %>
-    <%= render_node(@socket, node, assigns) %>
-  <% end %>
 </div>

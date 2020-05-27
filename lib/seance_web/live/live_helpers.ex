@@ -13,11 +13,11 @@ defmodule SeanceWeb.LiveHelpers do
         id: @post.id || :new,
         action: @live_action,
         post: @post,
-        return_to: Routes.post_index_path(@socket, :index) %>
+        on_return: {:redirect, Routes.post_index_path(@socket, :index)} %>
   """
   def live_modal(socket, component, opts) do
-    path = Keyword.fetch!(opts, :return_to)
-    modal_opts = [id: :modal, return_to: path, component: component, opts: opts]
+    on_return = Keyword.fetch!(opts, :on_return)
+    modal_opts = [id: :modal, on_return: on_return, component: component, opts: opts]
     live_component(socket, SeanceWeb.ModalComponent, modal_opts)
   end
 end

@@ -36,6 +36,7 @@ Hooks.LinkEditor = {
       theme: "ace/theme/solarized_light"
     })
     let id = this.el.dataset.id
+    editor.getSession().setTabSize(2)
     editor.getSession().on("change", e => {
       let content = editor.getSession().getValue();
       this.pushEventTo(`#editor-${id}`, "update", {node: {id, content}})

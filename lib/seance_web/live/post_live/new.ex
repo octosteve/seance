@@ -3,10 +3,11 @@ defmodule SeanceWeb.PostLive.New do
 
   alias Seance.Blog
   alias Seance.Blog.Post
+  alias Seance.Blog.BodyTypes.Code
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket |> assign(:code_examples, [])}
+    {:ok, socket |> assign(:adding_code, false)}
   end
 
   def render_stage(:new, assigns, socket) do
@@ -17,7 +18,7 @@ defmodule SeanceWeb.PostLive.New do
       title: page_title(:new),
       action: :new,
       post: assigns.post,
-      return_to: Routes.home_path(socket, :index)
+      on_return: {:redirect, Routes.home_path(socket, :index)}
     )
   end
 
@@ -33,7 +34,6 @@ defmodule SeanceWeb.PostLive.New do
 
   def page_title(:new), do: "New Post"
   def page_title(:edit), do: "Author Mode"
-  def page_title(:preview), do: "Preview Mode"
 
   @impl true
   def handle_params(params, _url, socket) do
@@ -51,14 +51,6 @@ defmodule SeanceWeb.PostLive.New do
 
     socket
     |> assign(:page_title, "Author Mode")
-    |> assign(:post, post)
-  end
-
-  defp apply_action(socket, :preview, %{"id" => id}) do
-    post = Blog.get_post!(id)
-
-    socket
-    |> assign(:page_title, "Preview Mode")
     |> assign(:post, post)
   end
 
@@ -87,18 +79,36 @@ defmodule SeanceWeb.PostLive.New do
   end
 
   def handle_info({:add_markdown_to_post}, socket) do
+    {:ok, post} = Blog.add_markdown_to_post(socket.assigns.post)
+
     socket =
       socket
-      |> assign(:post, Blog.add_markdown_to_post(socket.assigns.post))
+      |> assign(:post, post)
 
     {:noreply, socket}
   end
 
   def handle_info({:add_code_to_post, gist}, socket) do
+    {:ok, post} = Blog.add_code_to_post(socket.assigns.post, gist)
+
     socket =
       socket
-      |> assign(:post, Blog.add_code_to_post(socket.assigns.post, gist))
+      |> assign(:post, post)
 
-    {:noreply, socket}
+    {:noreply, socket |> assign(:post, post) |> assign(:adding_code, false)}
+  end
+
+  def handle_info(:collect_code_file, socket) do
+    {:noreply,
+     socket
+     |> assign(:adding_code, true)
+     |> assign(:code, Code.changeset())}
+  end
+
+  def handle_info(:cancel_code_colletion, socket) do
+    {:noreply,
+     socket
+     |> assign(:adding_code, false)
+     |> assign(:code, nil)}
   end
 end
