@@ -3,6 +3,7 @@ defmodule Seance.Blog.BodyTypes.Code do
   use Ecto.Schema
 
   alias Github.Gist
+  import Ecto.Changeset, only: [cast: 3, change: 2, apply_action!: 2]
 
   embedded_schema do
     field :content, :string
@@ -10,6 +11,8 @@ defmodule Seance.Blog.BodyTypes.Code do
     field :gist_id, :string
     field :filename, :string
   end
+
+  def new(opts \\ [content: ~s{IO.puts("Hello there")}, language: "elixir"])
 
   def new(%Gist{id: gist_id, language: language, filename: filename}) do
     %__MODULE__{
@@ -21,46 +24,27 @@ defmodule Seance.Blog.BodyTypes.Code do
     }
   end
 
-  def new(opts \\ [content: ~s{IO.puts("Hello there")}, language: "elixir"]) do
+  def new(opts) do
     content = opts[:content]
     language = opts[:language]
     %__MODULE__{content: content, language: language, id: Ecto.UUID.generate()}
   end
 
   def changeset do
-    new() |> Ecto.Changeset.change(%{})
+    new()
+    |> change(%{})
   end
 
-  def from_node(%{
-        "id" => id,
-        "content" => content,
-        "language" => language,
-        "gist_id" => gist_id,
-        "filename" => filename
-      }) do
-    struct!(__MODULE__,
-      id: id,
-      content: content,
-      language: language,
-      gist_id: gist_id,
-      filename: filename
-    )
+  def from_node(attrs) do
+    %__MODULE__{}
+    |> cast(attrs, [:id, :content, :language, :gist_id, :filename])
+    |> apply_action!(:from_node)
   end
 
-  def to_node(%{
-        id: id,
-        content: content,
-        language: language,
-        gist_id: gist_id,
-        filename: filename
-      }) do
-    %{
-      "type" => "code",
-      "id" => id,
-      "content" => content,
-      "language" => language,
-      "gist_id" => gist_id,
-      "filename" => filename
-    }
+  def to_node(%__MODULE__{} = struct) do
+    struct
+    |> Map.from_struct()
+    |> Map.put(:type, "code")
+    |> Map.new(fn {k, v} -> {to_string(k), v} end)
   end
 end

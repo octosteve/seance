@@ -83,7 +83,6 @@ defmodule SeanceWeb.PostLive.New do
 
   def handle_info({:add_code_to_post, gist}, socket) do
     insert_after = socket.assigns.insert_after
-    IO.inspect(insert_after, label: "GOING TO INSERT AFTER THIS THING")
     {:ok, post} = Blog.add_code_to_post(socket.assigns.post, insert_after, gist)
 
     socket =

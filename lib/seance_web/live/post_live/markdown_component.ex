@@ -38,6 +38,8 @@ defmodule SeanceWeb.PostLive.MarkdownComponent do
     end
   end
 
+  def rows_for(nil), do: 1
+
   def rows_for(content) do
     content |> String.split("\n") |> length()
   end
