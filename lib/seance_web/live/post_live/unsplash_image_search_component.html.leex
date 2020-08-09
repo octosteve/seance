@@ -7,8 +7,9 @@
     <%= submit "Search", class: "btn btn-primary" %>
 </form>
 
-<%= for image <- @images do %>
-  <%= link to: "#", id: image.id, phx_target: @myself, phx_click: "select", phx_value_image_id: image.id do %>
-    <%= img_tag image.url %>
-  <% end %>
-<% end %>
+<%= live_component(@socket, SeanceWeb.PostLive.ImageCarouselComponent,
+      images: @images,
+      current_image_index: @current_image_index,
+      id: :carousel
+    )
+  %>

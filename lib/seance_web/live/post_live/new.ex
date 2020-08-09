@@ -12,6 +12,7 @@ defmodule SeanceWeb.PostLive.New do
      |> assign(:adding_code, false)
      |> assign(:adding_image, false)
      |> assign(:unsplash_images, [])
+     |> assign(:current_image_index, 0)
      |> assign(:insert_after, 0)}
   end
 
@@ -127,7 +128,14 @@ defmodule SeanceWeb.PostLive.New do
   def handle_info({:update_unsplash_images, images}, socket) do
     {:noreply,
      socket
-     |> assign(:unsplash_images, images)}
+     |> assign(:unsplash_images, images)
+     |> assign(:current_image_index, 0)}
+  end
+
+  def handle_info({:update_current_image, index}, socket) do
+    {:noreply,
+     socket
+     |> assign(:current_image_index, index)}
   end
 
   def handle_info({:get_unsplash_image_search, index}, socket) do

@@ -52,7 +52,7 @@ defmodule Seance.Blog.BodyTypes.Image do
 
   def to_html_attribution(%__MODULE__{source: "Unsplash"} = struct) do
     ~s{
-      <div class="text-center">
+      <div>
       <img src="#{struct.url}" />
       <div>
       Photo by <a href="https://unsplash.com/@#{struct.creator_username}?utm_source=seance&utm_medium=referral">#{
