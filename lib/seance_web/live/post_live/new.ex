@@ -3,13 +3,15 @@ defmodule SeanceWeb.PostLive.New do
 
   alias Seance.Blog
   alias Seance.Blog.Post
-  alias Seance.Blog.BodyTypes.Code
+  alias Seance.Blog.BodyTypes.{Code, Image}
 
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
      socket
      |> assign(:adding_code, false)
+     |> assign(:adding_image, false)
+     |> assign(:unsplash_search_results, false)
      |> assign(:insert_after, 0)}
   end
 
@@ -93,7 +95,7 @@ defmodule SeanceWeb.PostLive.New do
     {:noreply, socket |> assign(:post, post) |> assign(:adding_code, false)}
   end
 
-  def handle_info({:collect_code_file, index}, socket) do
+  def handle_info({:get_code_filename, index}, socket) do
     {:noreply,
      socket
      |> assign(:adding_code, true)
@@ -106,5 +108,26 @@ defmodule SeanceWeb.PostLive.New do
      socket
      |> assign(:adding_code, false)
      |> assign(:code, nil)}
+  end
+
+  def handle_info({:update_unsplash_search_results, search}, socket) do
+    {:noreply,
+     socket
+     |> assign(:unsplash_search_results, search)}
+  end
+
+  def handle_info({:get_unsplash_image_search, index}, socket) do
+    {:noreply,
+     socket
+     |> assign(:adding_image, true)
+     |> assign(:insert_after, index)
+     |> assign(:image, Image.changeset())}
+  end
+
+  def handle_info(:cancel_unsplash_image_search, socket) do
+    {:noreply,
+     socket
+     |> assign(:adding_image, false)
+     |> assign(:image, nil)}
   end
 end

@@ -9,3 +9,14 @@
       on_return: {:call, fn -> send(self(), :cancel_code_colletion) end }
 ) %>
 <% end %>
+<%= if @adding_image do %>
+  <%= live_modal(
+      @socket,
+      SeanceWeb.PostLive.UnsplashImageSearchComponent,
+      id: :add_code,
+      post: @post,
+      image: @image,
+      search: @unsplash_search_results,
+      on_return: {:call, fn -> send(self(), :cancel_unsplash_image_search) end }
+) %>
+<% end %>

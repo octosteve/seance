@@ -29,6 +29,8 @@ services:
       - PGUSER
       - SIGNING_SECRET
       - GITHUB_AUTH_TOKEN
+      - UNSPLASH_ACCESS_KEY
+      - UNSPLASH_SECRET_KEY
     ports:
       - "4000:4000"
     links:
@@ -54,6 +56,8 @@ services:
       - PGUSER
       - SIGNING_SECRET
       - GITHUB_AUTH_TOKEN
+      - UNSPLASH_ACCESS_KEY
+      - UNSPLASH_SECRET_KEY
   release:
     build:
       context: .
