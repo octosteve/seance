@@ -39,4 +39,16 @@ defmodule SeanceWeb.PostLive.FormComponent do
       index: index
     )
   end
+
+  def render_node(socket, index, %Seance.Blog.BodyTypes.Image{} = node, assigns) do
+    live_component(socket, SeanceWeb.PostLive.ImageComponent,
+      id: node.id,
+      external_id: node.external_id,
+      url: node.url,
+      creator_name: node.creator_name,
+      creator_username: node.creator_username,
+      source: node.source,
+      index: index
+    )
+  end
 end

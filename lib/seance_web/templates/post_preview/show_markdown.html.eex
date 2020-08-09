@@ -17,5 +17,8 @@ tags: <%= inspect @post.tags %><br />
   <%= if type == :code do %>
   <%= content %>
    <% end %>
+  <%= if type == :image do %>
+  <%= content %>
+   <% end %>
 <% end %>
 </div>

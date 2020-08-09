@@ -16,7 +16,7 @@
       id: :add_code,
       post: @post,
       image: @image,
-      search: @unsplash_search_results,
+      images: @unsplash_images,
       on_return: {:call, fn -> send(self(), :cancel_unsplash_image_search) end }
 ) %>
 <% end %>

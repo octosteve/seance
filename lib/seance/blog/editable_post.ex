@@ -3,6 +3,7 @@ defmodule Seance.Blog.EditablePost do
   alias Seance.Blog.Post
   alias Seance.Blog.BodyTypes.Markdown
   alias Seance.Blog.BodyTypes.Code
+  alias Seance.Blog.BodyTypes.Image
 
   def update_post_node(%__MODULE__{} = post, id, content) do
     post.body
@@ -39,16 +40,17 @@ defmodule Seance.Blog.EditablePost do
 
   def add_code_node(%__MODULE__{} = post, insert_after, gist) do
     update_in(post.body, fn list ->
-      case Enum.at(list, insert_after + 1) do
-        %Markdown{} ->
-          list
-          |> List.insert_at(insert_after + 1, Code.new(gist))
+      list
+      |> List.insert_at(insert_after + 1, Code.new(gist))
+      |> List.insert_at(insert_after + 2, Markdown.new())
+    end)
+  end
 
-        _ ->
-          list
-          |> List.insert_at(insert_after + 1, Code.new(gist))
-          |> List.insert_at(insert_after + 2, Markdown.new())
-      end
+  def add_image_node(%__MODULE__{} = post, insert_after, image) do
+    update_in(post.body, fn list ->
+      list
+      |> List.insert_at(insert_after + 1, Image.new(image))
+      |> List.insert_at(insert_after + 2, Markdown.new())
     end)
   end
 
@@ -60,7 +62,7 @@ defmodule Seance.Blog.EditablePost do
     %__MODULE__{id: id, title: title, tags: tags, body: convert_body_from_db(body)}
   end
 
-  def for_db(%__MODULE__{id: id, title: title, tags: tags, body: body} = post) do
+  def for_db(%__MODULE__{id: id, title: title, tags: tags, body: body}) do
     %Post{id: id, title: title, tags: tags, body: convert_body_for_db(body)}
   end
 
@@ -80,6 +82,11 @@ defmodule Seance.Blog.EditablePost do
     [Code.to_node(node) | convert_body_for_db(rest)]
   end
 
+  def convert_body_for_db([%Image{} = node | rest]) do
+    [Image.to_node(node) | convert_body_for_db(rest)]
+  end
+
   def struct_for("markdown"), do: Markdown
   def struct_for("code"), do: Code
+  def struct_for("image"), do: Image
 end

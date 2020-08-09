@@ -4,8 +4,14 @@ defmodule SeanceWeb.PostLive.UnsplashImageSearchComponent do
 
   def handle_event("search", %{"image" => %{"q" => query}}, socket) do
     search = Unsplash.search(query)
-    send(self(), {:update_unsplash_search_results, search})
+    send(self(), {:update_unsplash_images, search.images})
+    {:noreply, assign(socket, :search, search)}
+  end
 
-    {:noreply, socket |> assign(:search, search)}
+  def handle_event("select", %{"image-id" => image_id}, socket) do
+    images = socket.assigns.search.images
+    selected_image = Enum.find(images, &(&1.id == image_id))
+    send(self(), {:add_image, selected_image})
+    {:noreply, socket}
   end
 end

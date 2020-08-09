@@ -11,7 +11,7 @@ defmodule SeanceWeb.PostLive.New do
      socket
      |> assign(:adding_code, false)
      |> assign(:adding_image, false)
-     |> assign(:unsplash_search_results, false)
+     |> assign(:unsplash_images, [])
      |> assign(:insert_after, 0)}
   end
 
@@ -91,8 +91,9 @@ defmodule SeanceWeb.PostLive.New do
       socket
       |> assign(:post, post)
       |> assign(:insert_after, nil)
+      |> assign(:adding_code, false)
 
-    {:noreply, socket |> assign(:post, post) |> assign(:adding_code, false)}
+    {:noreply, socket}
   end
 
   def handle_info({:get_code_filename, index}, socket) do
@@ -110,10 +111,23 @@ defmodule SeanceWeb.PostLive.New do
      |> assign(:code, nil)}
   end
 
-  def handle_info({:update_unsplash_search_results, search}, socket) do
+  def handle_info({:add_image, image}, socket) do
+    insert_after = socket.assigns.insert_after
+    {:ok, post} = Blog.add_image_to_post(socket.assigns.post, insert_after, image)
+
+    socket =
+      socket
+      |> assign(:post, post)
+      |> assign(:insert_after, nil)
+      |> assign(:adding_image, false)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:update_unsplash_images, images}, socket) do
     {:noreply,
      socket
-     |> assign(:unsplash_search_results, search)}
+     |> assign(:unsplash_images, images)}
   end
 
   def handle_info({:get_unsplash_image_search, index}, socket) do

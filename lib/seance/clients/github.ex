@@ -31,8 +31,9 @@ defmodule Seance.Clients.Github do
   end
 
   def delete_gist(gist_id) do
-    {:ok, %{status_code: 204}} =
-      HTTPoison.delete("https://api.github.com/gists/#{gist_id}", headers())
+    case HTTPoison.delete("https://api.github.com/gists/#{gist_id}", headers()) do
+      {:ok, %{status_code: status_code}} = result when status_code in [204, 404] -> result
+    end
   end
 
   defp headers do

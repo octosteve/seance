@@ -111,6 +111,21 @@ defmodule Seance.Blog do
     {:ok, EditablePost.from_db(post)}
   end
 
+  def add_image_to_post(%EditablePost{} = post, insert_after, image) do
+    %{body: body} =
+      post =
+      post
+      |> EditablePost.add_image_node(insert_after, image)
+      |> EditablePost.for_db()
+
+    {:ok, post} =
+      post
+      |> Ecto.Changeset.change(%{body: body})
+      |> Repo.update()
+
+    {:ok, EditablePost.from_db(post)}
+  end
+
   @doc """
   Deletes a post.
 

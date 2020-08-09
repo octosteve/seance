@@ -7,8 +7,8 @@
     <%= submit "Search", class: "btn btn-primary" %>
 </form>
 
-<%= if @search  do %>
-  <%= for image <- @search.images do %>
+<%= for image <- @images do %>
+  <%= link to: "#", id: image.id, phx_target: @myself, phx_click: "select", phx_value_image_id: image.id do %>
     <%= img_tag image.url %>
   <% end %>
 <% end %>

@@ -18,6 +18,9 @@ defmodule SeanceWeb.PostPreviewController do
         %Seance.Blog.BodyTypes.Code{gist_id: gist_id} ->
           ~s{<script src="https://gist.github.com/StevenNunez/#{gist_id}.js"></script>}
 
+        %Seance.Blog.BodyTypes.Image{} = image ->
+          Seance.Blog.BodyTypes.Image.to_html_attribution(image)
+
         %Seance.Blog.BodyTypes.Markdown{content: content} ->
           {:ok, html, _} = Earmark.as_html(content)
           html
@@ -30,6 +33,9 @@ defmodule SeanceWeb.PostPreviewController do
       case node do
         %Seance.Blog.BodyTypes.Code{gist_id: gist_id} ->
           {:code, ~s{<script src="https://gist.github.com/StevenNunez/#{gist_id}.js"></script>}}
+
+        %Seance.Blog.BodyTypes.Image{} = image ->
+          {:image, Seance.Blog.BodyTypes.Image.to_html_attribution(image)}
 
         %Seance.Blog.BodyTypes.Markdown{content: content} ->
           {:markdown, "<br />" <> String.replace(content, "\n", "<br />") <> "<br />"}
