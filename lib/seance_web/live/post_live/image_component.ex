@@ -1,7 +1,5 @@
 defmodule SeanceWeb.PostLive.ImageComponent do
   use SeanceWeb, :live_component
-  @code_block_pattern ~r/^```\z/m
-  @unsplash_slash_command_pattern ~r{^/unsplash\z}m
 
   def render(assigns) do
     ~L"""
@@ -9,7 +7,7 @@ defmodule SeanceWeb.PostLive.ImageComponent do
       <button type="button" class="close" aria-label="Close" phx-target="<%= @myself %>" phx-click="delete">
         <span aria-hidden="true">&times;</span>
       </button>
-    <%= link @creator_name, to: @url %>
+    <%= img_tag @thumb_url %>
     </div>
     """
   end

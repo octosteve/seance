@@ -7,6 +7,7 @@ defmodule Seance.Blog.BodyTypes.Image do
   embedded_schema do
     field :external_id, :string
     field :url, :string
+    field :thumb_url, :string
     field :creator_name, :string
     field :creator_username, :string
     field :source, :string
@@ -15,6 +16,7 @@ defmodule Seance.Blog.BodyTypes.Image do
   def new(%Unsplash.Image{
         id: external_id,
         url: url,
+        thumb_url: thumb_url,
         creator_name: creator_name,
         creator_username: creator_username
       }) do
@@ -22,6 +24,7 @@ defmodule Seance.Blog.BodyTypes.Image do
       id: Ecto.UUID.generate(),
       external_id: external_id,
       url: url,
+      thumb_url: thumb_url,
       creator_name: creator_name,
       creator_username: creator_username,
       source: "Unsplash"
@@ -39,7 +42,15 @@ defmodule Seance.Blog.BodyTypes.Image do
 
   def from_node(attrs) do
     %__MODULE__{}
-    |> cast(attrs, [:id, :external_id, :url, :creator_name, :creator_username, :source])
+    |> cast(attrs, [
+      :id,
+      :external_id,
+      :url,
+      :thumb_url,
+      :creator_name,
+      :creator_username,
+      :source
+    ])
     |> apply_action!(:from_node)
   end
 

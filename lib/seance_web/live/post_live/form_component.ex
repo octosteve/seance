@@ -45,6 +45,7 @@ defmodule SeanceWeb.PostLive.FormComponent do
       id: node.id,
       external_id: node.external_id,
       url: node.url,
+      thumb_url: node.thumb_url,
       creator_name: node.creator_name,
       creator_username: node.creator_username,
       source: node.source,

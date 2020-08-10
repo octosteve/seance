@@ -1,14 +1,15 @@
 defmodule Unsplash.Image do
-  defstruct [:id, :url, :creator_name, :creator_username]
+  defstruct [:id, :url, :thumb_url, :creator_name, :creator_username]
 
   def from_result(%{
         id: id,
-        urls: %{small: url},
+        urls: %{small: url, thumb: thumb_url},
         user: %{name: creator_name, username: creator_username}
       }) do
     struct!(__MODULE__,
       id: id,
       url: url,
+      thumb_url: thumb_url,
       creator_name: creator_name,
       creator_username: creator_username
     )
