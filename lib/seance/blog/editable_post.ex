@@ -19,32 +19,30 @@ defmodule Seance.Blog.EditablePost do
 
   def remove_post_node(%__MODULE__{} = post, index) do
     update_in(post.body, fn list ->
-      case {Enum.at(list, index - 1), Enum.at(list, index + 1)} do
-        {%Markdown{}, %Markdown{content: overflow_content}} ->
+      [former, latter] = [Enum.at(list, index - 1), Enum.at(list, index + 1)]
+
+      case {former, latter} do
+        {%Markdown{}, %Markdown{content: content}} ->
           list
           |> List.delete_at(index)
           |> List.delete_at(index)
           |> List.update_at(
             index - 1,
             fn item ->
-              Map.update(item, :content, "", fn
-                nil ->
-                  overflow_content
-
-                content ->
-                  content <> " " <> to_string(overflow_content)
-              end)
+              Map.update(item, :content, "", &merge_content(&1, content))
             end
           )
-          |> convert_body_for_db()
 
         _ ->
           list
           |> List.delete_at(index)
-          |> convert_body_for_db()
       end
     end)
   end
+
+  defp merge_content(content1, nil), do: content1
+  defp merge_content(nil, content2), do: content2
+  defp merge_content(content1, content2), do: "#{content1}\n#{content2}"
 
   def add_code_node(%__MODULE__{} = post, insert_after, gist) do
     update_in(post.body, fn list ->

@@ -120,4 +120,85 @@ defmodule Seance.Blog.EditablePostTest do
              ]
     end
   end
+
+  describe "remove_post_node/3" do
+    test "merges markdown nodes if they touch" do
+      post = %EditablePost{
+        title: "the title",
+        tags: ["tag1", "tag2"],
+        body: [
+          %Markdown{
+            id: "123",
+            content: "# hello"
+          },
+          %Code{
+            id: "456",
+            language: "elixir",
+            gist_id: "aa5a315d61ae9438b18d",
+            content: ~s{IO.puts("Sup")},
+            filename: "test"
+          },
+          %Markdown{
+            id: "789",
+            content: "and goodbye"
+          }
+        ]
+      }
+
+      assert %{body: [%Markdown{content: "# hello\nand goodbye"}]} =
+               EditablePost.remove_post_node(post, 1)
+    end
+
+    test "handles merge when first markdown has no content" do
+      post = %EditablePost{
+        title: "the title",
+        tags: ["tag1", "tag2"],
+        body: [
+          %Markdown{
+            id: "123",
+            content: nil
+          },
+          %Code{
+            id: "456",
+            language: "elixir",
+            gist_id: "aa5a315d61ae9438b18d",
+            content: ~s{IO.puts("Sup")},
+            filename: "test"
+          },
+          %Markdown{
+            id: "789",
+            content: "and goodbye"
+          }
+        ]
+      }
+
+      assert %{body: [%Markdown{content: "and goodbye"}]} = EditablePost.remove_post_node(post, 1)
+    end
+
+    test "handles merge when second markdown has no content" do
+      post = %EditablePost{
+        title: "the title",
+        tags: ["tag1", "tag2"],
+        body: [
+          %Markdown{
+            id: "123",
+            content: "# hello"
+          },
+          %Code{
+            id: "456",
+            language: "elixir",
+            gist_id: "aa5a315d61ae9438b18d",
+            content: ~s{IO.puts("Sup")},
+            filename: "test"
+          },
+          %Markdown{
+            id: "789",
+            content: nil
+          }
+        ]
+      }
+
+      assert %{body: [%Markdown{content: "# hello"}]} = EditablePost.remove_post_node(post, 1)
+    end
+  end
 end

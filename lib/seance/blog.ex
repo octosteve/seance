@@ -71,14 +71,16 @@ defmodule Seance.Blog do
   end
 
   def remove_post_node(%EditablePost{} = post, index) do
-    %{body: body} =
-      post
-      |> EditablePost.remove_post_node(index)
+    %{body: body} = post |> EditablePost.remove_post_node(index)
+
+    db_body =
+      body
+      |> EditablePost.convert_body_for_db()
 
     {:ok, post} =
       post
       |> EditablePost.for_db()
-      |> Ecto.Changeset.change(%{body: body})
+      |> Ecto.Changeset.change(%{body: db_body})
       |> Repo.update()
 
     {:ok, EditablePost.from_db(post)}
@@ -86,14 +88,17 @@ defmodule Seance.Blog do
 
   def add_code_to_post(%EditablePost{} = post, insert_after, gist) do
     %{body: body} =
-      post =
       post
       |> EditablePost.add_code_node(insert_after, gist)
-      |> EditablePost.for_db()
+
+    db_body =
+      body
+      |> EditablePost.convert_body_for_db()
 
     {:ok, post} =
       post
-      |> Ecto.Changeset.change(%{body: body})
+      |> EditablePost.for_db()
+      |> Ecto.Changeset.change(%{body: db_body})
       |> Repo.update()
 
     {:ok, EditablePost.from_db(post)}
@@ -101,15 +106,19 @@ defmodule Seance.Blog do
 
   def add_image_to_post(%EditablePost{} = post, insert_after, image) do
     %{body: body} =
-      post =
       post
       |> EditablePost.add_image_node(insert_after, image)
-      |> EditablePost.for_db()
+
+    db_body =
+      body
+      |> EditablePost.convert_body_for_db()
 
     {:ok, post} =
       post
-      |> Ecto.Changeset.change(%{body: body})
+      |> EditablePost.for_db()
+      |> Ecto.Changeset.change(%{body: db_body})
       |> Repo.update()
+      |> IO.inspect(label: "THIS IS WHAT GOT SAVED!!!!!!!!!!!!!!!!")
 
     {:ok, EditablePost.from_db(post)}
   end
