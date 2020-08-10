@@ -12,6 +12,17 @@ defmodule SeanceWeb.PostLive.UnsplashImageSearchComponent do
     images = socket.assigns.images
     selected_image = Enum.find(images, &(&1.id == image_id))
     send(self(), {:add_image, selected_image})
+
+    {:noreply, socket}
+  end
+
+  def handle_event("previous", _params, socket) do
+    send(self(), :decrement_image_index)
+    {:noreply, socket}
+  end
+
+  def handle_event("next", _params, socket) do
+    send(self(), :increment_image_index)
     {:noreply, socket}
   end
 end

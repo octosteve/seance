@@ -138,6 +138,18 @@ defmodule SeanceWeb.PostLive.New do
      |> assign(:current_image_index, index)}
   end
 
+  def handle_info(:decrement_image_index, socket) do
+    {:noreply,
+     socket
+     |> update(:current_image_index, &(&1 - 1))}
+  end
+
+  def handle_info(:increment_image_index, socket) do
+    {:noreply,
+     socket
+     |> update(:current_image_index, &(&1 + 1))}
+  end
+
   def handle_info({:get_unsplash_image_search, index}, socket) do
     {:noreply,
      socket
