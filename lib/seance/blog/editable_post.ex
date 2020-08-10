@@ -26,7 +26,15 @@ defmodule Seance.Blog.EditablePost do
           |> List.delete_at(index)
           |> List.update_at(
             index - 1,
-            &Map.update(&1, :content, "", fn content -> content <> " " <> overflow_content end)
+            fn item ->
+              Map.update(item, :content, "", fn
+                nil ->
+                  overflow_content
+
+                content ->
+                  content <> " " <> to_string(overflow_content)
+              end)
+            end
           )
           |> convert_body_for_db()
 

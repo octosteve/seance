@@ -56,18 +56,6 @@ defmodule Seance.Blog do
     |> Repo.insert()
   end
 
-  @doc """
-  Updates a post.
-
-  ## Examples
-
-      iex> update_post(post, %{field: new_value})
-      {:ok, %Post{}}
-
-      iex> update_post(post, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
   def update_post_node(%EditablePost{} = post, id, content) do
     body =
       post

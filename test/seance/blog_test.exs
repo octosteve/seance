@@ -11,11 +11,6 @@ defmodule Seance.BlogTest do
       tags: ["tag1", "tag2"],
       title: "some title"
     }
-    @update_attrs %{
-      body: [%{"type" => "markdown", "content" => "# Good Bye"}],
-      tags: ["tag3", "tag4"],
-      title: "some updated title"
-    }
     @invalid_attrs %{body: nil, tags: nil, title: nil}
 
     def post_fixture(attrs \\ %{}) do
@@ -33,7 +28,7 @@ defmodule Seance.BlogTest do
     end
 
     test "get_post!/1 returns the post with given id" do
-      post = post_fixture()
+      post = post_fixture() |> Seance.Blog.EditablePost.from_db()
       assert Blog.get_post!(post.id) == post
     end
 
@@ -46,21 +41,6 @@ defmodule Seance.BlogTest do
 
     test "create_post/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Blog.create_post(@invalid_attrs)
-    end
-
-    test "update_post/2 with valid data updates the post" do
-      post = post_fixture()
-      assert {:ok, %Post{} = post} = Blog.update_post(post, @update_attrs)
-      post = Blog.get_post!(post.id)
-      assert post.body == [%{"type" => "markdown", "content" => "# Good Bye"}]
-      assert post.tags == ["tag3", "tag4"]
-      assert post.title == "some updated title"
-    end
-
-    test "update_post/2 with invalid data returns error changeset" do
-      post = post_fixture()
-      assert {:error, %Ecto.Changeset{}} = Blog.update_post(post, @invalid_attrs)
-      assert post == Blog.get_post!(post.id)
     end
 
     test "delete_post/1 deletes the post" do

@@ -32,8 +32,44 @@ defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
     Map.put(struct, :body, body)
   end
 
-  def resolve(%__MODULE__{buffer_update: true} = struct) do
+  def resolve(%__MODULE__{buffer_update: true, body: body} = struct) do
+    body = maybe_split_last_line(body)
+
     struct
+    |> Map.put(:body, body)
+  end
+
+  defp maybe_split_last_line(body) do
+    if last_line(body) |> String.length() < 60 do
+      body
+    else
+      split_last_line(body)
+    end
+  end
+
+  defp split_last_line(body) do
+    split_last_word_pattern = ~r/\s(?=\S*$)/
+    split_last_line_pattern = ~r/\n(?=.*$)/
+
+    last_line =
+      body
+      |> last_line
+      |> String.split(split_last_word_pattern)
+      |> Enum.join("\n")
+
+    if String.contains?(body, "\n") do
+      [preserved_lines, _] =
+        body
+        |> String.split(split_last_line_pattern)
+
+      Enum.join([preserved_lines, last_line], "\n")
+    else
+      last_line
+    end
+  end
+
+  defp last_line(body) do
+    body |> String.split("\n") |> List.last()
   end
 
   defp beginning_code_block?(content) do
@@ -51,13 +87,7 @@ defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
   def row_count(%__MODULE__{body: nil}), do: 1
 
   def row_count(%__MODULE__{body: body}) do
-    recommended_line_length = 80
-
-    [
-      (String.length(body) / recommended_line_length) |> ceil,
-      String.split(body) |> length
-    ]
-    |> Enum.max()
+    String.split(body, "\n") |> length
   end
 end
 
@@ -107,7 +137,7 @@ defmodule SeanceWeb.PostLive.MarkdownComponent do
         send(self(), {:get_unsplash_image_search, index})
 
       %Content{buffer_update: true, body: body} ->
-        send(self(), {:update, socket.assigns.id, body})
+        send(self(), {:update, id, body})
     end
 
     {:noreply, socket}
