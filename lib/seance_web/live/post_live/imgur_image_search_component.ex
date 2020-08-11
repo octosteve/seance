@@ -16,6 +16,12 @@ defmodule SeanceWeb.PostLive.ImgurImageSearchComponent do
     {:noreply, socket}
   end
 
+  def handle_event("upload", %{"image" => image}, socket) do
+    image = Imgur.upload(image)
+    send(self(), {:add_image, image})
+    {:noreply, socket}
+  end
+
   def handle_event("previous", _params, socket) do
     send(self(), :decrement_image_index)
     {:noreply, socket}

@@ -50,6 +50,21 @@ Hooks.AutoFocus = {
     this.el.focus()
   }
 }
+
+Hooks.HandleUpload = {
+  mounted() {
+    this.el.addEventListener("submit", (event) => {
+      event.preventDefault()
+      var file = document.querySelector('#image_file').files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        let [_, image] = reader.result.split(",")
+        this.pushEventTo("#imgur_image_upload", "upload", {image: image})
+      };
+    })
+  }
+}
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, { params: { _csrf_token: csrfToken }, hooks: Hooks })
 

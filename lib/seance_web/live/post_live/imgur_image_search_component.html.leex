@@ -2,9 +2,16 @@
   <div class="form-group">
     <%= label f, :q, "Search" %>
     <%= text_input f, :q, class: "form-control", phx_hook: "AutoFocus" %>
-    <%= error_tag f, :filename %>
   </div>
     <%= submit "Search", class: "btn btn-primary" %>
+</form>
+
+<%= f = form_for @image, "#", [phx_hook: "HandleUpload", multipart: true, id: "imgur_image_upload"] %>
+  <div class="form-group">
+    <%= label f, :file, "Search" %>
+    <%= file_input f, :file, class: "form-control", id: "image_file" %>
+  </div>
+    <%= submit "Upload", class: "btn btn-primary" %>
 </form>
 
 <%= live_component(@socket, SeanceWeb.PostLive.ImageCarouselComponent,

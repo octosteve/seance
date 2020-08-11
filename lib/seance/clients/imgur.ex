@@ -61,15 +61,33 @@ end
 
 defmodule Seance.Clients.Imgur do
   @base_url "https://api.imgur.com/3/"
+
   def search(query) do
     search = Imgur.Search.new(query)
 
-    {:ok, %{body: body}} = HTTPoison.get("#{@base_url}/#{Imgur.Search.to_url(search)}", headers())
+    {:ok, %{body: body}} =
+      HTTPoison.get(
+        "#{@base_url}/#{Imgur.Search.to_url(search)}",
+        headers()
+      )
 
     results = body |> Jason.decode!(keys: :atoms)
 
     search
     |> Imgur.Search.add_results(results)
+  end
+
+  def upload(image) do
+    endpoint = "#{@base_url}/image"
+
+    task = Task.async(fn ->
+      {:ok, %{body: body}} = HTTPoison.post(endpoint, {:multipart, [{"image", image}]}, headers())
+      body
+      |> Jason.decode!(keys: :atoms)
+      |> Map.get(:data)
+      |> Imgur.Image.from_result()
+    end)
+    Task.await(task)
   end
 
   defp headers do
