@@ -21,6 +21,9 @@ defmodule SeanceWeb.PostPreviewController do
         %Seance.Blog.BodyTypes.Image{} = image ->
           Seance.Blog.BodyTypes.Image.to_html_attribution(image)
 
+        %Seance.Blog.BodyTypes.Markdown{content: nil} ->
+          ""
+
         %Seance.Blog.BodyTypes.Markdown{content: content} ->
           {:ok, html, _} = Earmark.as_html(content)
           html
@@ -36,6 +39,9 @@ defmodule SeanceWeb.PostPreviewController do
 
         %Seance.Blog.BodyTypes.Image{} = image ->
           {:image, Seance.Blog.BodyTypes.Image.to_html_attribution(image)}
+
+        %Seance.Blog.BodyTypes.Markdown{content: nil} ->
+          ""
 
         %Seance.Blog.BodyTypes.Markdown{content: content} ->
           {:markdown, "<br />" <> String.replace(content, "\n", "<br />") <> "<br />"}

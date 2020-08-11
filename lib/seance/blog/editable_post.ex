@@ -44,7 +44,7 @@ defmodule Seance.Blog.EditablePost do
   defp merge_content(nil, content2), do: content2
   defp merge_content(content1, content2), do: "#{content1}\n#{content2}"
 
-  def add_code_node(%__MODULE__{} = post, insert_after, gist) do
+  def add_code_node(%__MODULE__{} = post, insert_after, gist) when is_integer(insert_after) do
     update_in(post.body, fn list ->
       list
       |> List.insert_at(insert_after + 1, Code.new(gist))
@@ -52,7 +52,7 @@ defmodule Seance.Blog.EditablePost do
     end)
   end
 
-  def add_image_node(%__MODULE__{} = post, insert_after, image) do
+  def add_image_node(%__MODULE__{} = post, insert_after, image) when is_integer(insert_after) do
     update_in(post.body, fn list ->
       list
       |> List.insert_at(insert_after + 1, Image.new(image))

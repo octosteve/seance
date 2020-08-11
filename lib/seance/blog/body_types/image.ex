@@ -13,6 +13,11 @@ defmodule Seance.Blog.BodyTypes.Image do
     field :source, :string
   end
 
+  def new do
+    IO.inspect(Process.info(self(), :current_stacktrace))
+    %__MODULE__{}
+  end
+
   def new(%Unsplash.Image{
         id: external_id,
         url: url,
@@ -31,8 +36,21 @@ defmodule Seance.Blog.BodyTypes.Image do
     }
   end
 
-  def new(content \\ "") do
-    %__MODULE__{id: Ecto.UUID.generate()}
+  def new(%Imgur.Image{
+        id: external_id,
+        url: url,
+        thumb_url: thumb_url,
+        creator_account_url: creator_username
+      }) do
+    %__MODULE__{
+      id: Ecto.UUID.generate(),
+      external_id: external_id,
+      url: url,
+      thumb_url: thumb_url,
+      creator_name: nil,
+      creator_username: creator_username,
+      source: "Imgur"
+    }
   end
 
   def changeset do
@@ -69,5 +87,12 @@ defmodule Seance.Blog.BodyTypes.Image do
       Photo by <a href="https://unsplash.com/@#{struct.creator_username}?utm_source=seance&utm_medium=referral">#{
       struct.creator_name
     }</a> on <a href="https://unsplash.com/?utm_source=seance&utm_medium=referral">Unsplash</a>}
+  end
+
+  def to_html_attribution(%__MODULE__{source: "Imgur"} = struct) do
+    ~s{
+      <div>
+      <img src="#{struct.url}" />
+      <div>}
   end
 end

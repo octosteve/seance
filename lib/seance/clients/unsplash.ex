@@ -23,8 +23,8 @@ defmodule Unsplash.Search do
     struct!(__MODULE__, query: query, current_page: 1)
   end
 
-  def to_url(%__MODULE__{query: query, current_page: current_page} = struct) do
-    "search/photos?page=#{current_page}&query=#{query}"
+  def to_url(%__MODULE__{query: query, current_page: current_page}) do
+    URI.encode("search/photos?page=#{current_page}&query=#{query}")
   end
 
   def add_results(%__MODULE__{} = struct, %{

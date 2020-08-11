@@ -7,7 +7,10 @@ defmodule SeanceWeb.PostLive.ImageComponent do
       <button type="button" class="close" aria-label="Close" phx-target="<%= @myself %>" phx-click="delete">
         <span aria-hidden="true">&times;</span>
       </button>
-    <%= img_tag @thumb_url %>
+    <div>
+    <%= img_tag @thumb_url %> 
+    <div>
+    <small>from <%= @source %></small>
     </div>
     """
   end

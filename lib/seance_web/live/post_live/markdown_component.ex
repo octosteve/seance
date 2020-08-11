@@ -1,7 +1,16 @@
 defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
-  defstruct [:body, :target_pid, :inserting_code_block, :unsplash_slash_command, :buffer_update]
+  defstruct [
+    :body,
+    :target_pid,
+    :inserting_code_block,
+    :unsplash_slash_command,
+    :imgur_slash_command,
+    :buffer_update
+  ]
+
   @code_block_pattern ~r/^```\z/m
   @unsplash_slash_command_pattern ~r{^/unsplash\z}m
+  @imgur_slash_command_pattern ~r{^/imgur\z}m
 
   def new(body) do
     struct!(__MODULE__, body: body)
@@ -18,6 +27,7 @@ defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
     cond do
       beginning_code_block?(body) -> Map.put(struct, :inserting_code_block, true)
       unsplash_slash_command?(body) -> Map.put(struct, :unsplash_slash_command, true)
+      imgur_slash_command?(body) -> Map.put(struct, :imgur_slash_command, true)
       true -> Map.put(struct, :buffer_update, true)
     end
   end
@@ -29,6 +39,11 @@ defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
 
   def resolve(%__MODULE__{unsplash_slash_command: true, body: body} = struct) do
     body = String.replace(body, @unsplash_slash_command_pattern, "")
+    Map.put(struct, :body, body)
+  end
+
+  def resolve(%__MODULE__{imgur_slash_command: true, body: body} = struct) do
+    body = String.replace(body, @imgur_slash_command_pattern, "")
     Map.put(struct, :body, body)
   end
 
@@ -80,8 +95,8 @@ defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
     Regex.match?(@unsplash_slash_command_pattern, content)
   end
 
-  defp get_code_filename(socket, content) do
-    content = String.replace(content, @code_block_pattern, "")
+  defp imgur_slash_command?(content) do
+    Regex.match?(@imgur_slash_command_pattern, content)
   end
 
   def row_count(%__MODULE__{body: nil}), do: 1
@@ -135,6 +150,10 @@ defmodule SeanceWeb.PostLive.MarkdownComponent do
       %Content{unsplash_slash_command: true, body: body} ->
         send(self(), {:update, id, body})
         send(self(), {:get_unsplash_image_search, index})
+
+      %Content{imgur_slash_command: true, body: body} ->
+        send(self(), {:update, id, body})
+        send(self(), {:get_imgur_image_search, index})
 
       %Content{buffer_update: true, body: body} ->
         send(self(), {:update, id, body})

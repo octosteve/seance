@@ -118,7 +118,6 @@ defmodule Seance.Blog do
       |> EditablePost.for_db()
       |> Ecto.Changeset.change(%{body: db_body})
       |> Repo.update()
-      |> IO.inspect(label: "THIS IS WHAT GOT SAVED!!!!!!!!!!!!!!!!")
 
     {:ok, EditablePost.from_db(post)}
   end

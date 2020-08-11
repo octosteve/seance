@@ -9,15 +9,27 @@
       on_return: {:call, fn -> send(self(), :cancel_code_colletion) end }
 ) %>
 <% end %>
-<%= if @adding_image do %>
+<%= if @adding_unsplash_image do %>
   <%= live_modal(
       @socket,
       SeanceWeb.PostLive.UnsplashImageSearchComponent,
       id: :add_code,
       post: @post,
       image: @image,
-      images: @unsplash_images,
+      images: @images,
       current_image_index: @current_image_index,
       on_return: {:call, fn -> send(self(), :cancel_unsplash_image_search) end }
+) %>
+<% end %>
+<%= if @adding_imgur_image do %>
+  <%= live_modal(
+      @socket,
+      SeanceWeb.PostLive.ImgurImageSearchComponent,
+      id: :add_code,
+      post: @post,
+      image: @image,
+      images: @images,
+      current_image_index: @current_image_index,
+      on_return: {:call, fn -> send(self(), :cancel_imgur_image_search) end }
 ) %>
 <% end %>

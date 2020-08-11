@@ -10,8 +10,9 @@ defmodule SeanceWeb.PostLive.New do
     {:ok,
      socket
      |> assign(:adding_code, false)
-     |> assign(:adding_image, false)
-     |> assign(:unsplash_images, [])
+     |> assign(:adding_unsplash_image, false)
+     |> assign(:adding_imgur_image, false)
+     |> assign(:images, [])
      |> assign(:current_image_index, 0)
      |> assign(:insert_after, 0)}
   end
@@ -120,15 +121,16 @@ defmodule SeanceWeb.PostLive.New do
       socket
       |> assign(:post, post)
       |> assign(:insert_after, nil)
-      |> assign(:adding_image, false)
+      |> assign(:adding_unsplash_image, false)
+      |> assign(:adding_imgur_image, false)
 
     {:noreply, socket}
   end
 
-  def handle_info({:update_unsplash_images, images}, socket) do
+  def handle_info({:update_images, images}, socket) do
     {:noreply,
      socket
-     |> assign(:unsplash_images, images)
+     |> assign(:images, images)
      |> assign(:current_image_index, 0)}
   end
 
@@ -153,7 +155,7 @@ defmodule SeanceWeb.PostLive.New do
   def handle_info({:get_unsplash_image_search, index}, socket) do
     {:noreply,
      socket
-     |> assign(:adding_image, true)
+     |> assign(:adding_unsplash_image, true)
      |> assign(:insert_after, index)
      |> assign(:image, Image.changeset())}
   end
@@ -161,7 +163,24 @@ defmodule SeanceWeb.PostLive.New do
   def handle_info(:cancel_unsplash_image_search, socket) do
     {:noreply,
      socket
-     |> assign(:adding_image, false)
-     |> assign(:image, nil)}
+     |> assign(:adding_unsplash_image, false)
+     |> assign(:image, nil)
+     |> assign(:current_image_index, 0)}
+  end
+
+  def handle_info({:get_imgur_image_search, index}, socket) do
+    {:noreply,
+     socket
+     |> assign(:adding_imgur_image, true)
+     |> assign(:insert_after, index)
+     |> assign(:image, Image.changeset())}
+  end
+
+  def handle_info(:cancel_imgur_image_search, socket) do
+    {:noreply,
+     socket
+     |> assign(:adding_imgur_image, false)
+     |> assign(:image, nil)
+     |> assign(:current_image_index, 0)}
   end
 end
