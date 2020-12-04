@@ -57,7 +57,7 @@ services:
       - PGPORT
       - PGUSER
       - SIGNING_SECRET
-      - GITHUB_AUTH_TOKEN
+      - GH_AUTH_TOKEN
       - UNSPLASH_ACCESS_KEY
       - UNSPLASH_SECRET_KEY
       - IMGUR_CLIENT_ID
@@ -73,6 +73,10 @@ services:
       - PGPORT
       - PGUSER
       - SIGNING_SECRET
-      - GITHUB_AUTH_TOKEN
+      - GH_AUTH_TOKEN
+      - UNSPLASH_ACCESS_KEY
+      - UNSPLASH_SECRET_KEY
+      - IMGUR_CLIENT_ID
+      - IMGUR_CLIENT_SECRET
     ports:
       - "4000:4000"
