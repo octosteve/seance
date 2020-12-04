@@ -37,7 +37,7 @@ defmodule Seance.Clients.Github do
   end
 
   defp headers do
-    token = System.get_env("GITHUB_AUTH_TOKEN")
+    token = System.get_env("GH_AUTH_TOKEN")
     [Authorization: "token #{token}"]
   end
 end
