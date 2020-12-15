@@ -1,6 +1,7 @@
 FROM bitwalker/alpine-elixir-phoenix:1.9.4
 RUN mix local.hex --force && mix local.rebar --force
 RUN apk --update add postgresql-client
+RUN apk add --no-cache python2
 
 COPY . /app/
 
