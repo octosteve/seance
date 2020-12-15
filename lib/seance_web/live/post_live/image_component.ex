@@ -17,6 +17,7 @@ defmodule SeanceWeb.PostLive.ImageComponent do
 
   @impl true
   def handle_event("delete", _params, socket) do
+    # Delete the image from imgur
     send(self(), {:delete, socket.assigns.index})
     {:noreply, socket}
   end

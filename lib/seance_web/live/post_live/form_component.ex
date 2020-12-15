@@ -29,6 +29,15 @@ defmodule SeanceWeb.PostLive.FormComponent do
     )
   end
 
+  def render_node(socket, index, %Seance.Blog.BodyTypes.MermaidChart{} = node, assigns) do
+    live_component(socket, SeanceWeb.PostLive.MermaidChartComponent,
+      id: node.id,
+      content: node.content,
+      changeset: assigns.changeset,
+      index: index
+    )
+  end
+
   def render_node(socket, index, %Seance.Blog.BodyTypes.Code{} = node, assigns) do
     live_component(socket, SeanceWeb.PostLive.CodeComponent,
       id: node.id,

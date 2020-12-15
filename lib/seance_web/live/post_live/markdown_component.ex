@@ -5,12 +5,14 @@ defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
     :inserting_code_block,
     :unsplash_slash_command,
     :imgur_slash_command,
+    :chart_slash_command,
     :buffer_update
   ]
 
   @code_block_pattern ~r/^```\z/m
   @unsplash_slash_command_pattern ~r{^/unsplash\z}m
   @imgur_slash_command_pattern ~r{^/imgur\z}m
+  @chart_slash_command_pattern ~r{^/chart\z}m
 
   def new(body) do
     struct!(__MODULE__, body: body)
@@ -28,6 +30,7 @@ defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
       beginning_code_block?(body) -> Map.put(struct, :inserting_code_block, true)
       unsplash_slash_command?(body) -> Map.put(struct, :unsplash_slash_command, true)
       imgur_slash_command?(body) -> Map.put(struct, :imgur_slash_command, true)
+      chart_slash_command?(body) -> Map.put(struct, :chart_slash_command, true)
       true -> Map.put(struct, :buffer_update, true)
     end
   end
@@ -44,6 +47,11 @@ defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
 
   def resolve(%__MODULE__{imgur_slash_command: true, body: body} = struct) do
     body = String.replace(body, @imgur_slash_command_pattern, "")
+    Map.put(struct, :body, body)
+  end
+
+  def resolve(%__MODULE__{chart_slash_command: true, body: body} = struct) do
+    body = String.replace(body, @chart_slash_command_pattern, "")
     Map.put(struct, :body, body)
   end
 
@@ -97,6 +105,10 @@ defmodule SeanceWeb.PostLive.MarkdownComponent.Content do
 
   defp imgur_slash_command?(content) do
     Regex.match?(@imgur_slash_command_pattern, content)
+  end
+
+  defp chart_slash_command?(content) do
+    Regex.match?(@chart_slash_command_pattern, content)
   end
 
   def row_count(%__MODULE__{body: nil}), do: 1
@@ -154,6 +166,10 @@ defmodule SeanceWeb.PostLive.MarkdownComponent do
       %Content{imgur_slash_command: true, body: body} ->
         send(self(), {:update, id, body})
         send(self(), {:get_imgur_image_search, index})
+
+      %Content{chart_slash_command: true, body: body} ->
+        send(self(), {:update, id, body})
+        send(self(), {:add_mermaid_chart, index})
 
       %Content{buffer_update: true, body: body} ->
         send(self(), {:update, id, body})

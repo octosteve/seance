@@ -22,7 +22,9 @@ import { Socket } from "phoenix"
 import NProgress from "nprogress"
 import { LiveSocket } from "phoenix_live_view"
 import Ace from "ace-builds"
-import "ace-builds/webpack-resolver";
+import "ace-builds/webpack-resolver"
+import mermaid from "mermaid"
+mermaid.initialize({startOnLoad: false})
 
 let Hooks = {}
 Hooks.LinkEditor = {
@@ -62,6 +64,25 @@ Hooks.HandleUpload = {
         let [_, image] = reader.result.split(",")
         this.pushEventTo("#imgur_image_upload", "upload", {image: image})
       };
+    })
+  }
+}
+
+Hooks.HandleChart = {
+  mounted() {
+    mermaid.mermaidAPI.initialize({
+      startOnLoad: false
+    });
+    this.handleEvent("update_chart", ({id, graph}) => {
+      var element = this.el
+      let elId = element.dataset.id
+
+      if (elId === id) {
+        var insertSvg = function(svgCode,){ 
+          element.innerHTML = svgCode;
+        };
+        mermaid.mermaidAPI.render(`preview-${id}`, graph, insertSvg);
+      }
     })
   }
 }

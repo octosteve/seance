@@ -127,6 +127,16 @@ defmodule SeanceWeb.PostLive.New do
     {:noreply, socket}
   end
 
+  def handle_info({:add_mermaid_chart, insert_after}, socket) do
+    {:ok, post} = Blog.add_mermaid_chart_to_post(socket.assigns.post, insert_after)
+
+    socket =
+      socket
+      |> assign(:post, post)
+
+    {:noreply, socket}
+  end
+
   def handle_info({:update_images, images}, socket) do
     {:noreply,
      socket

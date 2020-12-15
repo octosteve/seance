@@ -14,7 +14,6 @@ defmodule Seance.Blog.BodyTypes.Image do
   end
 
   def new do
-    IO.inspect(Process.info(self(), :current_stacktrace))
     %__MODULE__{}
   end
 
@@ -81,18 +80,19 @@ defmodule Seance.Blog.BodyTypes.Image do
 
   def to_html_attribution(%__MODULE__{source: "Unsplash"} = struct) do
     ~s{
-      <div>
-      <img src="#{struct.url}" />
-      <div>
-      Photo by <a href="https://unsplash.com/@#{struct.creator_username}?utm_source=seance&utm_medium=referral">#{
+<div>
+  <img width="100%" src="#{struct.url}" />
+<small>Photo by <a href="https://unsplash.com/@#{struct.creator_username}?utm_source=seance&utm_medium=referral">#{
       struct.creator_name
-    }</a> on <a href="https://unsplash.com/?utm_source=seance&utm_medium=referral">Unsplash</a>}
+    }</a> on <a href="https://unsplash.com/?utm_source=seance&utm_medium=referral">Unsplash</a></small>
+<div>
+    }
   end
 
   def to_html_attribution(%__MODULE__{source: "Imgur"} = struct) do
     ~s{
-      <div>
-      <img src="#{struct.url}" />
-      <div>}
+<div>
+<img width="100%" src="#{struct.url}" />
+<div>}
   end
 end

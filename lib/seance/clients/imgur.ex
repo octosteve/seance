@@ -80,13 +80,17 @@ defmodule Seance.Clients.Imgur do
   def upload(image) do
     endpoint = "#{@base_url}/image"
 
-    task = Task.async(fn ->
-      {:ok, %{body: body}} = HTTPoison.post(endpoint, {:multipart, [{"image", image}]}, headers())
-      body
-      |> Jason.decode!(keys: :atoms)
-      |> Map.get(:data)
-      |> Imgur.Image.from_result()
-    end)
+    task =
+      Task.async(fn ->
+        {:ok, %{body: body}} =
+          HTTPoison.post(endpoint, {:multipart, [{"image", image}]}, headers())
+
+        body
+        |> Jason.decode!(keys: :atoms)
+        |> Map.get(:data)
+        |> Imgur.Image.from_result()
+      end)
+
     Task.await(task)
   end
 

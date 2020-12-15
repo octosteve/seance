@@ -4,7 +4,15 @@ defmodule SeanceWeb.PostPreviewController do
 
   def show(conn, %{"id" => id, "markdown" => "true"}) do
     post = Blog.get_post!(id)
-    render(conn, "show_markdown.html", preview: generate_markdown_preview(post), post: post)
+    # render(conn, "show_markdown.html", preview: generate_markdown_preview(post), post: post)
+    markdown =
+      Phoenix.View.render_to_string(
+        SeanceWeb.PostPreviewView,
+        "markdown",
+        post: post
+      )
+
+    text(conn, markdown)
   end
 
   def show(conn, %{"id" => id}) do
@@ -27,6 +35,12 @@ defmodule SeanceWeb.PostPreviewController do
         %Seance.Blog.BodyTypes.Markdown{content: content} ->
           {:ok, html, _} = Earmark.as_html(content)
           html
+
+        %Seance.Blog.BodyTypes.MermaidChart{content: nil} ->
+          ""
+
+        %Seance.Blog.BodyTypes.MermaidChart{content: content} ->
+          "<h1>A chart goes here</h1>"
       end
     end
   end
@@ -41,10 +55,16 @@ defmodule SeanceWeb.PostPreviewController do
           {:image, Seance.Blog.BodyTypes.Image.to_html_attribution(image)}
 
         %Seance.Blog.BodyTypes.Markdown{content: nil} ->
-          ""
+          {:markdown, ""}
 
         %Seance.Blog.BodyTypes.Markdown{content: content} ->
-          {:markdown, "<br />" <> String.replace(content, "\n", "<br />") <> "<br />"}
+          {:markdown, Phoenix.HTML.Format.text_to_html(content)}
+
+        %Seance.Blog.BodyTypes.MermaidChart{content: nil} ->
+          {:mermaid_chart, ""}
+
+        %Seance.Blog.BodyTypes.MermaidChart{content: content} ->
+          {:mermaid_chart, Phoenix.HTML.Format.text_to_html(content)}
       end
     end
   end

@@ -4,6 +4,7 @@ defmodule Seance.Blog.EditablePost do
   alias Seance.Blog.BodyTypes.Markdown
   alias Seance.Blog.BodyTypes.Code
   alias Seance.Blog.BodyTypes.Image
+  alias Seance.Blog.BodyTypes.MermaidChart
 
   def update_post_node(%__MODULE__{} = post, id, content) do
     post.body
@@ -43,6 +44,14 @@ defmodule Seance.Blog.EditablePost do
   defp merge_content(content1, nil), do: content1
   defp merge_content(nil, content2), do: content2
   defp merge_content(content1, content2), do: "#{content1}\n#{content2}"
+
+  def add_mermaid_chart_node(%__MODULE__{} = post, insert_after) when is_integer(insert_after) do
+    update_in(post.body, fn list ->
+      list
+      |> List.insert_at(insert_after + 1, MermaidChart.new())
+      |> List.insert_at(insert_after + 2, Markdown.new())
+    end)
+  end
 
   def add_code_node(%__MODULE__{} = post, insert_after, gist) when is_integer(insert_after) do
     update_in(post.body, fn list ->
@@ -84,6 +93,10 @@ defmodule Seance.Blog.EditablePost do
     [Markdown.to_node(node) | convert_body_for_db(rest)]
   end
 
+  def convert_body_for_db([%MermaidChart{} = node | rest]) do
+    [MermaidChart.to_node(node) | convert_body_for_db(rest)]
+  end
+
   def convert_body_for_db([%Code{} = node | rest]) do
     [Code.to_node(node) | convert_body_for_db(rest)]
   end
@@ -93,6 +106,7 @@ defmodule Seance.Blog.EditablePost do
   end
 
   def struct_for("markdown"), do: Markdown
+  def struct_for("mermaid_chart"), do: MermaidChart
   def struct_for("code"), do: Code
   def struct_for("image"), do: Image
 end

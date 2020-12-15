@@ -20,5 +20,10 @@ tags: <%= inspect @post.tags %><br />
   <%= if type == :image do %>
   <%= content %>
    <% end %>
+  <%= if type == :mermaid_chart do %>
+    <%= "<div class='mermaid'>" %>
+      <%=  content %>
+    <%= "</div>" %>
+   <% end %>
 <% end %>
 </div>

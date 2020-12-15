@@ -86,6 +86,24 @@ defmodule Seance.Blog do
     {:ok, EditablePost.from_db(post)}
   end
 
+  def add_mermaid_chart_to_post(%EditablePost{} = post, insert_after) do
+    %{body: body} =
+      post
+      |> EditablePost.add_mermaid_chart_node(insert_after)
+
+    db_body =
+      body
+      |> EditablePost.convert_body_for_db()
+
+    {:ok, post} =
+      post
+      |> EditablePost.for_db()
+      |> Ecto.Changeset.change(%{body: db_body})
+      |> Repo.update()
+
+    {:ok, EditablePost.from_db(post)}
+  end
+
   def add_code_to_post(%EditablePost{} = post, insert_after, gist) do
     %{body: body} =
       post
