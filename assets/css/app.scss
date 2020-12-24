@@ -1,18 +1,7 @@
-@import "../node_modules/bootstrap/dist/css/bootstrap.css";
-@import "../node_modules/font-awesome/css/font-awesome.css";
-@import "variables.scss";
-@import "mixins.scss";
-@import "global.scss";
-@import "navbar.scss";
-@import "masthead.scss";
-@import "post.scss";
-@import "contact.scss";
-@import "footer.scss";
-@import "bootstrap-overrides.scss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.markdown-component{
-  margin-bottom: 2rem;
-}
 .markdown-form {
   textarea {
     border: none;

@@ -1,10 +1,12 @@
 <%= f = form_for @image, "#", [phx_submit: :search, phx_target: @myself] %>
-  <div class="form-group">
-    <%= label f, :q, "Search" %>
-    <%= text_input f, :q, class: "form-control", phx_hook: "AutoFocus" %>
-    <%= error_tag f, :filename %>
+  <div>
+    <%= label f, :q, "Search", class: "block text-sm font-medium text-gray-700 w-full" %>
+    <%= text_input f, :q, autocomplete: "off", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", phx_hook: "AutoFocus" %>
+    <%= error_tag f, :q %>
   </div>
-    <%= submit "Search", class: "btn btn-primary" %>
+  <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+    <%= submit "Search", class: "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm", phx_disable_with: "Searching Unsplash..." %>
+  </div>
 </form>
 
 <%= live_component(@socket, SeanceWeb.PostLive.ImageCarouselComponent,

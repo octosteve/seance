@@ -122,6 +122,7 @@ defmodule SeanceWeb.PostLive.MarkdownComponent do
   alias SeanceWeb.PostLive.MarkdownComponent.Content
   use SeanceWeb, :live_component
 
+  @impl true
   def update(assigns, socket) do
     assigns = Map.merge(socket.assigns, assigns)
     socket = Map.put(socket, :assigns, assigns)
@@ -131,15 +132,16 @@ defmodule SeanceWeb.PostLive.MarkdownComponent do
      |> assign(:content, Content.new(assigns.content))}
   end
 
+  @impl true
   def render(assigns) do
     ~L"""
     <div class="markdown-component">
-      <%= f = form_for @changeset, "#",
+      <%= form_for @changeset, "#",
       class: "markdown-form",
       phx_target: @myself,
       phx_change: "update" %>
         <textarea
-            class= "form-control"
+            class="w-full px-3 py-2 mt-5 text-gray-700 border rounded-lg focus:outline-none resize-none"
             rows="<%= Content.row_count(@content) %>"
             name="node[content]"
             id="<%= @id %>"><%= @content.body %></textarea>

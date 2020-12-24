@@ -1,18 +1,19 @@
 defmodule SeanceWeb.PostLive.MermaidChartComponent do
   use SeanceWeb, :live_component
 
+  @impl true
   def render(assigns) do
     ~L"""
     <div class="mermaid-chart-component">
       <button type="button" class="close" aria-label="Close" phx-target="<%= @myself %>" phx-click="delete">
         <span aria-hidden="true">&times;</span>
       </button>
-      <%= f = form_for @changeset, "#",
+      <%= form_for @changeset, "#",
       class: "mermaid-chart-form",
       phx_target: @myself,
       phx_change: "update" %>
         <textarea
-            class="form-control"
+            class="w-full px-3 py-2 mt-5 text-gray-700 border rounded-lg focus:outline-none resize-none"
             phx-debounce="1000"
             name="node[graph]"
             phx-hook="AutoFocus"
@@ -31,7 +32,6 @@ defmodule SeanceWeb.PostLive.MermaidChartComponent do
 
   @impl true
   def handle_event("update", %{"node" => %{"graph" => graph}}, socket) do
-    index = socket.assigns.index
     id = socket.assigns.id
 
     send(self(), {:update, id, graph})

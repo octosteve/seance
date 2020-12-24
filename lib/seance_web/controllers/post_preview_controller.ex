@@ -24,7 +24,7 @@ defmodule SeanceWeb.PostPreviewController do
     for node <- post.body do
       case node do
         %Seance.Blog.BodyTypes.Code{gist_id: gist_id} ->
-          ~s{<script src="https://gist.github.com/StevenNunez/#{gist_id}.js"></script>}
+          ~s{<script src="https://gist.github.com/octosteve/#{gist_id}.js"></script>}
 
         %Seance.Blog.BodyTypes.Image{} = image ->
           Seance.Blog.BodyTypes.Image.to_html_attribution(image)
@@ -39,7 +39,7 @@ defmodule SeanceWeb.PostPreviewController do
         %Seance.Blog.BodyTypes.MermaidChart{content: nil} ->
           ""
 
-        %Seance.Blog.BodyTypes.MermaidChart{content: content} ->
+        %Seance.Blog.BodyTypes.MermaidChart{} ->
           "<h1>A chart goes here</h1>"
       end
     end
@@ -49,7 +49,7 @@ defmodule SeanceWeb.PostPreviewController do
     for node <- post.body do
       case node do
         %Seance.Blog.BodyTypes.Code{gist_id: gist_id} ->
-          {:code, ~s{<script src="https://gist.github.com/StevenNunez/#{gist_id}.js"></script>}}
+          {:code, ~s{<script src="https://gist.github.com/octosteve/#{gist_id}.js"></script>}}
 
         %Seance.Blog.BodyTypes.Image{} = image ->
           {:image, Seance.Blog.BodyTypes.Image.to_html_attribution(image)}

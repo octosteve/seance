@@ -1,9 +1,9 @@
-<%= f = form_for @changeset, "#", id: "post-form", phx_submit: "initialize_post" %>
-<div class="form-group">
-<%= label f, :title %>
-<%= text_input f, :title, class: "form-control form-control-lg" %>
-<%= error_tag f, :title %>
+<%= f = form_for @changeset, "#", id: "post-form", class: "w-full", phx_submit: "initialize_post" %>
+<div>
+  <%= label f, :title, class: "block text-sm font-medium text-gray-700 w-full" %>
+  <%= text_input f, :title, autocomplete: "off", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+  <%= error_tag f, :title %>
 </div>
-<div class="form-group">
-    <%= submit "Start", class: "btn btn-primary", phx_disable_with: "Setting up..." %>
+<div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+  <%= submit "Start", class: "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm", phx_disable_with: "Setting up..." %>
 </div>

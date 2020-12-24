@@ -1,8 +1,10 @@
 <%= f = form_for @code, "#", [phx_submit: :add_code, phx_target: @myself] %>
-  <div class="form-group">
-    <%= label f, :filename %>
-    <%= text_input f, :filename, class: "form-control", phx_hook: "AutoFocus" %>
+  <div>
+    <%= label f, :filename, class: "block text-sm font-medium text-gray-700 w-full" %>
+    <%= text_input f, :filename, autocomplete: "off", class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md", phx_hook: "AutoFocus" %>
     <%= error_tag f, :filename %>
   </div>
-    <%= submit "Add", class: "btn btn-primary" %>
+  <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+    <%= submit "Add", class: "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm", phx_disable_with: "Creating on Github" %>
+  </div>
 </form>

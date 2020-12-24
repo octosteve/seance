@@ -1,6 +1,7 @@
 defmodule SeanceWeb.PostLive.ImageComponent do
   use SeanceWeb, :live_component
 
+  @impl true
   def render(assigns) do
     ~L"""
     <div class="image-component">

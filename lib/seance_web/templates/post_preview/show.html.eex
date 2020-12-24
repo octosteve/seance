@@ -4,6 +4,6 @@
 </ul>
 
 <div class="container">
-<h1><%= @post.title %></h1>
+<h1 class="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl mb-4"><%= @post.title %></h1>
 <%= raw @preview %>
 </div>

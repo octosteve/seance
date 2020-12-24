@@ -120,6 +120,7 @@ defmodule SeanceWeb.PostLive.New do
     socket =
       socket
       |> assign(:post, post)
+      |> assign(:images, [])
       |> assign(:insert_after, nil)
       |> assign(:adding_unsplash_image, false)
       |> assign(:adding_imgur_image, false)
@@ -162,6 +163,12 @@ defmodule SeanceWeb.PostLive.New do
      |> update(:current_image_index, &(&1 + 1))}
   end
 
+  def handle_info(:reset_image_index, socket) do
+    {:noreply,
+     socket
+     |> assign(:current_image_index, 0)}
+  end
+
   def handle_info({:get_unsplash_image_search, index}, socket) do
     {:noreply,
      socket
@@ -175,6 +182,7 @@ defmodule SeanceWeb.PostLive.New do
      socket
      |> assign(:adding_unsplash_image, false)
      |> assign(:image, nil)
+     |> assign(:images, [])
      |> assign(:current_image_index, 0)}
   end
 
@@ -191,6 +199,7 @@ defmodule SeanceWeb.PostLive.New do
      socket
      |> assign(:adding_imgur_image, false)
      |> assign(:image, nil)
+     |> assign(:images, [])
      |> assign(:current_image_index, 0)}
   end
 end

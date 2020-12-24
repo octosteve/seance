@@ -2,7 +2,6 @@ defmodule SeanceWeb.PostLive.FormComponent do
   use SeanceWeb, :live_component
 
   alias Seance.Blog
-  alias Seance.Blog.BodyTypes.Code
 
   @impl true
   def update(%{post: post} = assigns, socket) do
@@ -38,7 +37,7 @@ defmodule SeanceWeb.PostLive.FormComponent do
     )
   end
 
-  def render_node(socket, index, %Seance.Blog.BodyTypes.Code{} = node, assigns) do
+  def render_node(socket, index, %Seance.Blog.BodyTypes.Code{} = node, _assigns) do
     live_component(socket, SeanceWeb.PostLive.CodeComponent,
       id: node.id,
       content: node.content,
@@ -49,7 +48,7 @@ defmodule SeanceWeb.PostLive.FormComponent do
     )
   end
 
-  def render_node(socket, index, %Seance.Blog.BodyTypes.Image{} = node, assigns) do
+  def render_node(socket, index, %Seance.Blog.BodyTypes.Image{} = node, _assigns) do
     live_component(socket, SeanceWeb.PostLive.ImageComponent,
       id: node.id,
       external_id: node.external_id,

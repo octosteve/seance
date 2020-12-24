@@ -1,6 +1,7 @@
 defmodule SeanceWeb.PostLive.CodeComponent do
   use SeanceWeb, :live_component
 
+  @impl true
   def update(assigns, socket) do
     socket =
       socket
@@ -12,6 +13,7 @@ defmodule SeanceWeb.PostLive.CodeComponent do
     {:ok, assign(socket, assigns)}
   end
 
+  @impl true
   def render(assigns) do
     ~L"""
     <div class="code-component">

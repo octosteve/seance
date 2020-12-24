@@ -2,7 +2,6 @@ defmodule Seance.Blog.BodyTypes.Image do
   @behaviour Seance.Blog.BodyTypeBehaviour
   use Ecto.Schema
   import Ecto.Changeset, only: [cast: 3, apply_action!: 2, change: 2]
-  alias Unsplash.Image
 
   embedded_schema do
     field :external_id, :string
