@@ -3,12 +3,24 @@ RUN mix local.hex --force && mix local.rebar --force
 RUN apk --update add postgresql-client
 RUN apk add --no-cache python2
 
-COPY . /app/
-
+RUN mkdir -p /app
 WORKDIR /app
 
+COPY mix.exs .
+COPY mix.lock .
+COPY bin bin
+
 RUN mix do deps.get, deps.compile
+
+COPY assets ./assets
 RUN npm install --prefix assets
+
+COPY config ./config
+COPY lib ./lib
+COPY priv ./priv
+COPY test ./test
+
+RUN mix compile
 
 EXPOSE 4000
 CMD ["./bin/run.sh"]

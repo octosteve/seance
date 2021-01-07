@@ -17,16 +17,22 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
-      - .:/app
+      - /app/assets/node_modules
+      - ./assets:/app/assets
+      - ./config:/app/config:ro
+      - ./lib:/app/lib:ro
+      - ./priv:/app/priv
+      - ./test:/app/test:ro
+      - ./mix.exs:/app/mix.exs:ro
       - seance-db-data:/var/lib/postgresql/data
     stdin_open: true
     tty: true
     environment:
-      - PGDATABASE
-      - PGHOST
-      - PGPASSWORD
-      - PGPORT
-      - PGUSER
+      - PGDATABASE=seance_dev
+      - PGHOST=db
+      - PGPASSWORD=postgres
+      - PGPORT=5432
+      - PGUSER=postgres
       - SIGNING_SECRET
       - GH_AUTH_TOKEN
       - UNSPLASH_ACCESS_KEY
