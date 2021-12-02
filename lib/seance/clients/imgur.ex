@@ -46,7 +46,7 @@ defmodule Imgur.Search do
   end
 
   def to_url(%__MODULE__{query: query}) do
-    URI.encode("/gallery/search/?q=#{query}&q_type=png")
+    URI.encode("gallery/search/?q=#{query}&q_type=png")
   end
 
   def add_results(%__MODULE__{} = struct, %{data: data}) do
@@ -60,7 +60,7 @@ defmodule Imgur.Search do
 end
 
 defmodule Seance.Clients.Imgur do
-  @base_url "https://api.imgur.com/3/"
+  @base_url "https://api.imgur.com/3"
 
   def search(query) do
     search = Imgur.Search.new(query)

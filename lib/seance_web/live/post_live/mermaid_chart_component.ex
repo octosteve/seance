@@ -13,9 +13,10 @@ defmodule SeanceWeb.PostLive.MermaidChartComponent do
       phx_target: @myself,
       phx_change: "update" %>
         <textarea
-            class="w-full px-3 py-2 mt-5 text-gray-700 border rounded-lg focus:outline-none resize-none"
+            class="w-full px-3 py-2 mt-5 text-gray-700 border rounded-lg resize-none focus:outline-none"
             phx-debounce="1000"
             name="node[graph]"
+            rows="<%= row_count(@content) %>"
             phx-hook="AutoFocus"
             id="<%= @id %>"><%= @content %></textarea>
       </form>
@@ -42,5 +43,11 @@ defmodule SeanceWeb.PostLive.MermaidChartComponent do
   def handle_event("delete", _params, socket) do
     send(self(), {:delete, socket.assigns.index})
     {:noreply, socket}
+  end
+
+  defp row_count(nil), do: 1
+
+  defp row_count(content) do
+    String.split(content, "\n") |> length
   end
 end
